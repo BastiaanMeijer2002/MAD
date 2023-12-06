@@ -1,3 +1,4 @@
+import 'package:clucknrides/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,10 +14,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Cluck'N'Rides",
       theme: ThemeData(
+        fontFamily: 'Inter',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: const HomeScreen(),
     );
   }
 }
