@@ -101,7 +101,7 @@ class ListItem extends StatelessWidget {
                             '$capacity',
                             style: const TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w500,
                                 color: Color(0xFFF1ECEC)
                             ),
                           ),
@@ -121,7 +121,7 @@ class ListItem extends StatelessWidget {
                                   '$range',
                                   style: const TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w400,
+                                      fontWeight: FontWeight.w500,
                                       color: Color(0xFFF1ECEC)
                                   ),
                                 ),

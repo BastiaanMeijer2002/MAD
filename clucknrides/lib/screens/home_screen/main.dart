@@ -19,6 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Car(name: "Ford Fiesta", capacity: 4, range: 200, isAvailable: true, img: 'fiesta.png'),
     Car(name: "Ford Fiesta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png'),
     Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png'),
+    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: true, img: 'fiesta.png'),
+    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png'),
+    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: true, img: 'fiesta.png'),
   ];
 
   @override
@@ -35,15 +38,16 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: Stack(
+      body:
+      Stack(
         children: [
-          Positioned(
-            top: 125,
-            left: 0,
-            right: 0,
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
+          Positioned.fill(
+            top: 110,
+            child: Container(
               child: ListView.builder(
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+
                 itemCount: cars.length,
                 itemBuilder: (context, index) {
                   return ListItem(
@@ -57,14 +61,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          AnimatedOpacity(
-            duration: const Duration(milliseconds: 300),
-            opacity: isFilterSelected || isSortSelected ? 0.5 : 0.0,
-            child: const ModalBarrier(
-              color: Color(0xFF0F110C),
-              dismissible: false,
+          if (isFilterSelected || isSortSelected)
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: isFilterSelected || isSortSelected ? 0.5 : 0.0,
+              child: const Positioned.fill(
+                child: ModalBarrier(
+                  color: Color(0xFF0F110C),
+                  dismissible: false,
+                ),
+              ),
             ),
-          ),
           Positioned(
             top: 10,
             left: 2,
@@ -88,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
-      ),
+      )
+
     );
   }
 }
