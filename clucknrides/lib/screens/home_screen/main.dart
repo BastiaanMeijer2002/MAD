@@ -1,19 +1,25 @@
+import 'package:clucknrides/models/Car.dart';
 import 'package:clucknrides/screens/home_screen/filter_widget/main.dart';
 import 'package:clucknrides/screens/home_screen/list_item/main.dart';
 import 'package:clucknrides/screens/home_screen/sort_widget/main.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
-
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isFilterSelected = false;
   bool isSortSelected = false;
+
+  List<Car> cars = [
+    Car(name: "Ford Fiesta", capacity: 4, range: 200, isAvailable: true, img: 'fiesta.png'),
+    Car(name: "Ford Fiesta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png'),
+    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +31,31 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(
             color: Color(0xfffcf7f7),
             fontFamily: "Inter",
-            fontWeight: FontWeight.w600
-          )
-        )
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
       body: Stack(
         children: [
-          const Positioned(
+          Positioned(
             top: 125,
             left: 0,
             right: 0,
-            child: ListItem(true),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: ListView.builder(
+                itemCount: cars.length,
+                itemBuilder: (context, index) {
+                  return ListItem(
+                    cars[index].isAvailable,
+                    cars[index].name,
+                    cars[index].capacity,
+                    cars[index].range,
+                    cars[index].img,
+                  );
+                },
+              ),
+            ),
           ),
           AnimatedOpacity(
             duration: const Duration(milliseconds: 300),
@@ -68,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
-      )
+      ),
     );
   }
 }
