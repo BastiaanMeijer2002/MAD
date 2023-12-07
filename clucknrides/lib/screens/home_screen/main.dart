@@ -1,4 +1,5 @@
 import 'package:clucknrides/models/Car.dart';
+import 'package:clucknrides/screens/car_screen/main.dart';
 import 'package:clucknrides/screens/home_screen/filter_widget/main.dart';
 import 'package:clucknrides/screens/home_screen/list_item/main.dart';
 import 'package:clucknrides/screens/home_screen/sort_widget/main.dart';
@@ -51,11 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: cars.length,
                 itemBuilder: (context, index) {
                   return ListItem(
-                    cars[index].isAvailable,
-                    cars[index].name,
-                    cars[index].capacity,
-                    cars[index].range,
-                    cars[index].img,
+                    cars[index]
                   );
                 },
               ),
