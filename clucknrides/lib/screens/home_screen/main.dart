@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           if (isFilterSelected || isSortSelected)
             AnimatedOpacity(
-              duration: const Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 100),
               opacity: isFilterSelected || isSortSelected ? 0.5 : 0.0,
               child: const Positioned.fill(
                 child: ModalBarrier(

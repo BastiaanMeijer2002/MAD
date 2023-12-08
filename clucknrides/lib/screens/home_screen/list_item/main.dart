@@ -14,7 +14,7 @@ class ListItem extends StatelessWidget {
       onTap: (){
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const CarScreen())
+          MaterialPageRoute(builder: (context) => CarScreen(car: car))
         );
       },
       child: Stack(
