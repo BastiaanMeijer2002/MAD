@@ -1,5 +1,4 @@
 import 'package:clucknrides/models/Car.dart';
-import 'package:clucknrides/screens/car_screen/main.dart';
 import 'package:clucknrides/screens/home_screen/filter_widget/main.dart';
 import 'package:clucknrides/screens/home_screen/list_item/main.dart';
 import 'package:clucknrides/screens/home_screen/sort_widget/main.dart';
@@ -17,12 +16,12 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isSortSelected = false;
 
   List<Car> cars = [
-    Car(name: "Ford Fiesta", capacity: 4, range: 200, isAvailable: true, img: 'fiesta.png'),
-    Car(name: "Ford Fiesta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png'),
-    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png'),
-    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: true, img: 'fiesta.png'),
-    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png'),
-    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: true, img: 'fiesta.png'),
+    Car(name: "Ford Fiesta", capacity: 4, range: 200, isAvailable: true, img: 'fiesta.png', rate: 1.25),
+    Car(name: "Ford Fiesta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png', rate: 1.25),
+    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png', rate: 1.25),
+    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: true, img: 'fiesta.png', rate: 1.25),
+    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png', rate: 1.25),
+    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: true, img: 'fiesta.png', rate: 1.25),
   ];
 
   @override
@@ -93,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       )
-
     );
   }
 }

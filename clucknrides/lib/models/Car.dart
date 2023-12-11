@@ -2,6 +2,7 @@ class Car {
   String name;
   int capacity;
   double range;
+  double rate;
   bool isAvailable;
   String img;
 
@@ -11,6 +12,7 @@ class Car {
     required this.range,
     required this.isAvailable,
     required this.img,
+    required this.rate,
   });
 
   factory Car.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Car {
       range: json["range"] ?? 0,
       isAvailable: json["isAvailable"] ?? 0,
       img: json["img"],
+      rate: json["rate"],
     );
   }
 
@@ -30,6 +33,7 @@ class Car {
       'range': range,
       'isAvailable': isAvailable,
       'img': img,
+      'rate': rate,
     };
   }
 }

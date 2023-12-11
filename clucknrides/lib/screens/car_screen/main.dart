@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../models/Car.dart';
 
 class CarScreen extends StatefulWidget {
   final Car car;
+  final bool isFavorite;
 
-  const CarScreen({Key? key, required this.car}) : super(key: key);
+  const CarScreen({Key? key, required this.car, required this.isFavorite}) : super(key: key);
 
   @override
   State<CarScreen> createState() => _CarScreenState();
 }
 
 class _CarScreenState extends State<CarScreen> {
+  bool favorite = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +37,7 @@ class _CarScreenState extends State<CarScreen> {
           Container(
             width: double.infinity,
             height: 286,
-            color: const Color(0xFFFAD4D8),
+            color: widget.car.isAvailable ? const Color(0xFFFAD4D8) : const Color(0xFF9BBFB9),
             child: Center(child: Image.asset('assets/images/${widget.car.img}')),
           ),
           Container(
@@ -60,10 +63,160 @@ class _CarScreenState extends State<CarScreen> {
                     ),
                   ),
                   const Spacer(),
-                  const Icon(Icons.star_border, color: Colors.white, size: 36),
+                  GestureDetector(
+                    child: Icon(favorite ? Icons.star : Icons.star_border, color: Colors.white, size: 36),
+                    onTap: (){
+                      setState(() {
+                        favorite = !favorite;
+                      });
+                    },
+                  )
                 ],
               ),
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 26, right: 20, left: 20),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Color(0xFF0F110C),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
+              width: double.infinity,
+              height: 220,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 50,
+                  top: 17
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/people.svg',
+                          width: 55,
+                          height: 55,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 105),
+                          child: Text(
+                            "${widget.car.capacity} persons",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 0.5
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 13,
+                        bottom: 13,
+                      ),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/fuel.svg',
+                            width: 55,
+                            height: 55,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 105),
+                            child: Text(
+                              "${widget.car.range} KM",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 0.5
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/price.svg',
+                          width: 55,
+                          height: 55,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 105),
+                          child: Text(
+                            "€${widget.car.rate}/KM",
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 0.5
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ),
+          ),
+          const Spacer(),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 30, left: 15, right: 15),
+                child: Row(
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFFAD4D8),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      width: 190,
+                      height: 40,
+                      child: const Center(
+                        child: Text(
+                          "Rent now",
+                          style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 30, right: 15),
+                child: Row(
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF9BBFB9),
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        width: 190,
+                        height: 40,
+                        child: const Center(
+                          child: Text(
+                            "Book for later",
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w400
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]
+                ),
+              ),
+            ],
           )
         ],
       )
