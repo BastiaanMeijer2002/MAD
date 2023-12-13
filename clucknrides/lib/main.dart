@@ -1,7 +1,9 @@
 import 'package:clucknrides/screens/home_screen/main.dart';
+import 'package:dotenv/dotenv.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  DotEnv().load();
   runApp(const MyApp());
 }
 

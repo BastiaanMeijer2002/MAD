@@ -1,28 +1,25 @@
 class Car {
   String name;
   int capacity;
-  double range;
+  String fuel;
   double rate;
-  bool isAvailable;
   String img;
 
   Car({
     required this.name,
     required this.capacity,
-    required this.range,
-    required this.isAvailable,
+    required this.fuel,
     required this.img,
     required this.rate,
   });
 
   factory Car.fromJson(Map<String, dynamic> json) {
     return Car(
-      name: json["name"] ?? '',
-      capacity: json["capacity"] ?? 0,
-      range: json["range"] ?? 0,
-      isAvailable: json["isAvailable"] ?? 0,
-      img: json["img"],
-      rate: json["rate"],
+      name: '${json["brand"]} ${json["model"]}' ?? '',
+      capacity: json["nrOfSeats"] ?? 0,
+      fuel: json["fuel"] ?? 0,
+      img: 'fiesta.png',
+      rate: json["price"],
     );
   }
 
@@ -30,8 +27,7 @@ class Car {
     return {
       'name': name,
       'capacity': capacity,
-      'range': range,
-      'isAvailable': isAvailable,
+      'range': fuel,
       'img': img,
       'rate': rate,
     };

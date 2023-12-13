@@ -2,6 +2,7 @@ import 'package:clucknrides/models/Car.dart';
 import 'package:clucknrides/screens/home_screen/filter_widget/main.dart';
 import 'package:clucknrides/screens/home_screen/list_item/main.dart';
 import 'package:clucknrides/screens/home_screen/sort_widget/main.dart';
+import 'package:clucknrides/services/fetch_cars.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,17 +13,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late Future<List<Car>> futureCars;
   bool isFilterSelected = false;
   bool isSortSelected = false;
 
-  List<Car> cars = [
-    Car(name: "Ford Fiesta", capacity: 4, range: 200, isAvailable: true, img: 'fiesta.png', rate: 1.25),
-    Car(name: "Ford Fiesta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png', rate: 1.25),
-    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png', rate: 1.25),
-    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: true, img: 'fiesta.png', rate: 1.25),
-    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: false, img: 'fiesta.png', rate: 1.25),
-    Car(name: "Ford Fresta", capacity: 4, range: 200, isAvailable: true, img: 'fiesta.png', rate: 1.25),
-  ];
+  // List<Car> cars = [
+  //   Car(name: "Ford Fiesta", capacity: 4, fuel: 200, isAvailable: true, img: 'fiesta.png', rate: 1.25),
+  //   Car(name: "Ford Fiesta", capacity: 4, fuel: 200, isAvailable: false, img: 'fiesta.png', rate: 1.25),
+  //   Car(name: "Ford Fresta", capacity: 4, fuel: 200, isAvailable: false, img: 'fiesta.png', rate: 1.25),
+  //   Car(name: "Ford Fresta", capacity: 4, fuel: 200, isAvailable: true, img: 'fiesta.png', rate: 1.25),
+  //   Car(name: "Ford Fresta", capacity: 4, fuel: 200, isAvailable: false, img: 'fiesta.png', rate: 1.25),
+  //   Car(name: "Ford Fresta", capacity: 4, fuel: 200, isAvailable: true, img: 'fiesta.png', rate: 1.25),
+  // ];
+
+  @override
+  void initState() {
+    super.initState();
+    futureCars = fetchCars();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +51,24 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Positioned.fill(
             top: 110,
-            child: Container(
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const ClampingScrollPhysics(),
-
-                itemCount: cars.length,
-                itemBuilder: (context, index) {
-                  return ListItem(
-                    cars[index]
-                  );
-                },
-              ),
+            child: FutureBuilder<List<Car>>(
+              future: futureCars,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Car> carlist = snapshot.data as List<Car>;
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      itemCount: carlist.length,
+                      itemBuilder: (context, index) {
+                        return ListItem(
+                          carlist[index],
+                        );
+                      },
+                    );
+                  }
+                  return const CircularProgressIndicator();
+                }
             ),
           ),
           if (isFilterSelected || isSortSelected)

@@ -10,6 +10,7 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const isAvailable = true;
     return GestureDetector(
       onTap: (){
         Navigator.push(
@@ -21,7 +22,7 @@ class ListItem extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-                color: car.isAvailable ? const Color(0xFFFAD4D8) : const Color(0xFF9BBFB9),
+                color: isAvailable ? const Color(0xFFFAD4D8) : const Color(0xFF9BBFB9),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                     color: const Color(0xFF0F110C),
@@ -46,10 +47,10 @@ class ListItem extends StatelessWidget {
                             bottomRight: Radius.circular(8)
                         )
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Text(
-                        car.isAvailable ? "Available" : "Not available",
-                        style: const TextStyle(
+                        isAvailable ? "Available" : "Not available",
+                        style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w300,
                             color: Color(0xFFF1ECEC)
@@ -82,7 +83,7 @@ class ListItem extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(left: 17),
                         child: Text(
-                            car.name,
+                            car.name.substring(0,10),
                             style: const TextStyle(
                                 color: Color(0xFFF1ECEC),
                                 fontWeight: FontWeight.w600,
@@ -123,7 +124,7 @@ class ListItem extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 7),
                                     child: Text(
-                                      car.range.toString(),
+                                      car.fuel.toString(),
                                       style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,

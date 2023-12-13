@@ -14,6 +14,7 @@ class CarScreen extends StatefulWidget {
 
 class _CarScreenState extends State<CarScreen> {
   bool favorite = false;
+  bool isAvailable = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +23,7 @@ class _CarScreenState extends State<CarScreen> {
         title: Builder(
           builder: (BuildContext context) {
             return Text(
-              "Rent ${widget.car.name}",
+              "Rent ${widget.car.name.substring(0,10)}",
               style: const TextStyle(
                 color: Color(0xfffcf7f7),
                 fontFamily: "Inter",
@@ -37,7 +38,7 @@ class _CarScreenState extends State<CarScreen> {
           Container(
             width: double.infinity,
             height: 286,
-            color: widget.car.isAvailable ? const Color(0xFFFAD4D8) : const Color(0xFF9BBFB9),
+            color: isAvailable ? const Color(0xFFFAD4D8) : const Color(0xFF9BBFB9),
             child: Center(child: Image.asset('assets/images/${widget.car.img}')),
           ),
           Container(
@@ -55,7 +56,7 @@ class _CarScreenState extends State<CarScreen> {
               child: Row(
                 children: [
                   Text(
-                    widget.car.isAvailable ? "Currently available" : "Currently not available",
+                    isAvailable ? "Currently available" : "Currently not available",
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -127,7 +128,7 @@ class _CarScreenState extends State<CarScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 105),
                             child: Text(
-                              "${widget.car.range} KM",
+                              "${widget.car.fuel} KM",
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 24,
