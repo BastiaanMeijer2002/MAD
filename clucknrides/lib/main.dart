@@ -1,4 +1,5 @@
 import 'package:clucknrides/screens/home_screen/main.dart';
+import 'package:clucknrides/screens/start_screen.dart';
 import 'package:dotenv/dotenv.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: const StartScreen(),
     );
   }
 }

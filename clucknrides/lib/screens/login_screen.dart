@@ -1,4 +1,7 @@
+import 'package:clucknrides/screens/password_reset_screen.dart';
 import 'package:flutter/material.dart';
+
+import 'home_screen/main.dart';
 
 class LoginScreen extends StatelessWidget {
   static const routeName = '/login-screen';
@@ -25,18 +28,6 @@ class LoginScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Image.asset(
-                'assets/icons/BackArrow.png',
-                width: 40,
-                height: 40,
-                alignment: Alignment.topLeft,
-              ),
-            ),
-          ),
           const Padding(
             padding: EdgeInsets.only(top: 20, left: 20, right: 20),
             child: Text(
@@ -117,37 +108,58 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFFAD4D8),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  width: screenWidth * 0.9,
-                  height: 40,
-                  child: const Center(
-                    child: Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 18, // Adjusted font size
-                        fontWeight: FontWeight.w600,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                    );
+                  },
+                  child:
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFFAD4D8),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      width: screenWidth * 0.9,
+                      height: 40,
+                      child: const Center(
+                        child: Text(
+                          "Login",
+                          style: TextStyle(
+                            fontSize: 18, // Adjusted font size
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                )
               ],
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 5, left: 20, right: 20),
-            child: Text(
-              "Forgot Password?",
-              style: TextStyle(
+          Padding(
+            padding: const EdgeInsets.only(top: 5, left: 20, right: 20),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PasswordResetScreen(),
+                  ),
+                );
+              },
+              child: const Text(
+                "Forgot Password?",
+                style: TextStyle(
                 fontSize: 18, // Adjusted font size
                 fontWeight: FontWeight.w400,
                 color: Colors.blue,
+                ),
               ),
             ),
-          ),
+          )
         ],
       ),
     );

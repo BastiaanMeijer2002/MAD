@@ -1,4 +1,7 @@
+import 'package:clucknrides/screens/register_screen.dart';
 import 'package:flutter/material.dart';
+
+import 'login_screen.dart';
 
 class StartScreen extends StatelessWidget {
   static const routeName = '/start-screen';
@@ -35,19 +38,29 @@ class StartScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 10, left: buttonPadding, right: buttonPadding),
                 child: Row(
                   children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFAD4D8),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      width: screenWidth*0.45,
-                      height: 40,
-                      child: const Center(
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFAD4D8),
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        width: screenWidth*0.45,
+                        height: 40,
+                        child: const Center(
+                          child: Text(
+                            "Login",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
@@ -59,22 +72,32 @@ class StartScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 10, right: buttonPadding),
                 child: Row(
                   children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFAD4D8),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      width: screenWidth*0.45,
-                      height: 40,
-                      child: const Center(
-                        child: Text(
-                          "Register",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFAD4D8),
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        width: screenWidth*0.45,
+                        height: 40,
+                        child: const Center(
+                          child: Text(
+                            "Register",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                      ),
+                      )
                     )
                   ]
                 )
