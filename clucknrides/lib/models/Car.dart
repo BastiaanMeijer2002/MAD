@@ -17,7 +17,7 @@ class Car {
     return Car(
       name: '${json["brand"]} ${json["model"]}' ?? '',
       capacity: json["nrOfSeats"] ?? 0,
-      fuel: json["fuel"] ?? 0,
+      fuel: json["fuel"] ?? 'fuel',
       img: 'fiesta.png',
       rate: json["price"],
     );

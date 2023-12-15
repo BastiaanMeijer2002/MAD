@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
   static const routeName = '/register-screen';
+  final FlutterSecureStorage storage;
 
-  const RegisterScreen({super.key});
+  const RegisterScreen({Key? key, required this.storage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +178,7 @@ class RegisterScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
+                        builder: (context) => LoginScreen(storage: storage,),
                       ),
                     );
                   },

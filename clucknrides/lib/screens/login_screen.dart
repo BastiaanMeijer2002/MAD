@@ -1,17 +1,36 @@
 import 'package:clucknrides/screens/password_reset_screen.dart';
+import 'package:clucknrides/services/authenticationService.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'home_screen/main.dart';
 
-class LoginScreen extends StatelessWidget {
-  static const routeName = '/login-screen';
+class LoginScreen extends StatefulWidget {
+  final FlutterSecureStorage storage;
+  const LoginScreen({Key? key, required this.storage}) : super(key: key);
 
-  const LoginScreen({super.key});
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  late Future<bool> jwt;
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<bool> loginUser() async {
+    jwt = authenticateUser(userNameController.text, passwordController.text, widget.storage);
+    return jwt;
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff0f110c),
@@ -31,7 +50,7 @@ class LoginScreen extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(top: 20, left: 20, right: 20),
             child: Text(
-              "howdy, please enter your credentials to login.",
+              "Howdy, please enter your credentials to login.",
               style: TextStyle(
                 fontSize: 20, // Adjusted font size
                 fontWeight: FontWeight.w600,
@@ -44,7 +63,7 @@ class LoginScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Email:",
+                  "Username:",
                   style: TextStyle(
                     fontSize: 18, // Adjusted font size
                     fontWeight: FontWeight.w400,
@@ -58,11 +77,12 @@ class LoginScreen extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: TextField(
-                      decoration: InputDecoration(
+                      controller: userNameController,
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Enter your email",
+                        hintText: "Enter your username",
                       ),
                     ),
                   ),
@@ -90,10 +110,11 @@ class LoginScreen extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: TextField(
+                      controller: passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: "Enter your password",
                       ),
@@ -113,28 +134,47 @@ class LoginScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
+                        builder: (context) => FutureBuilder<bool>(
+                          future: loginUser(),
+                          builder: (context, snapshot) {
+                            if (snapshot.data!) {
+                              return HomeScreen(storage: widget.storage,);
+                            } else {
+                              return AlertDialog(
+                                title: const Text('Error'),
+                                content: const Text("Wrong credentials"),
+                                actions: <Widget>[
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(); // Close the dialog
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            }
+                          }
+                        ),
+                      )
                     );
                   },
-                  child:
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFAD4D8),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      width: screenWidth * 0.9,
-                      height: 40,
-                      child: const Center(
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                            fontSize: 18, // Adjusted font size
-                            fontWeight: FontWeight.w600,
-                          ),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFFAD4D8),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    width: screenWidth * 0.9,
+                    height: 40,
+                    child: const Center(
+                      child: Text(
+                        "Login",
+                        style: TextStyle(
+                          fontSize: 18, // Adjusted font size
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
+                  ),
                 )
               ],
             ),

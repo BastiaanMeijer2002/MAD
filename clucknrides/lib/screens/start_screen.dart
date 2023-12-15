@@ -1,12 +1,14 @@
 import 'package:clucknrides/screens/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'login_screen.dart';
 
 class StartScreen extends StatelessWidget {
   static const routeName = '/start-screen';
+  final FlutterSecureStorage storage;
 
-  const StartScreen({super.key});
+  const StartScreen({Key? key, required this.storage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class StartScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
+                            builder: (context) => LoginScreen(storage: storage,),
                           ),
                         );
                       },
@@ -77,7 +79,7 @@ class StartScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const RegisterScreen(),
+                            builder: (context) => RegisterScreen(storage: storage,),
                           ),
                         );
                       },

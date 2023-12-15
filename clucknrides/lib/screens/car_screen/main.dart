@@ -23,7 +23,7 @@ class _CarScreenState extends State<CarScreen> {
         title: Builder(
           builder: (BuildContext context) {
             return Text(
-              "Rent ${widget.car.name.substring(0,10)}",
+              "Rent ${widget.car.name}",
               style: const TextStyle(
                 color: Color(0xfffcf7f7),
                 fontFamily: "Inter",

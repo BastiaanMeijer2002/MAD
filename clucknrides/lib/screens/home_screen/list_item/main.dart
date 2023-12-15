@@ -83,7 +83,7 @@ class ListItem extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(left: 17),
                         child: Text(
-                            car.name.substring(0,10),
+                            car.name,
                             style: const TextStyle(
                                 color: Color(0xFFF1ECEC),
                                 fontWeight: FontWeight.w600,
