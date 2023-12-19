@@ -1,5 +1,6 @@
 import 'package:clucknrides/screens/home_screen/main.dart';
 import 'package:clucknrides/screens/start_screen.dart';
+import 'package:clucknrides/widgets/loading_widget/main.dart';
 import 'package:dotenv/dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'login_screen.dart';
+import 'login_screen/main.dart';
 
 class RegisterScreen extends StatelessWidget {
   static const routeName = '/register-screen';

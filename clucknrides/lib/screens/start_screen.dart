@@ -2,7 +2,7 @@ import 'package:clucknrides/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'login_screen.dart';
+import 'login_screen/main.dart';
 
 class StartScreen extends StatelessWidget {
   static const routeName = '/start-screen';

@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:clucknrides/screens/password_reset_screen.dart';
 import 'package:clucknrides/services/authenticationService.dart';
+import 'package:clucknrides/widgets/errors/invalid_credentials_error.dart';
+import 'package:clucknrides/widgets/errors/server_error.dart';
+import 'package:clucknrides/widgets/loading_widget/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'home_screen/main.dart';
+import '../home_screen/main.dart';
 
 class LoginScreen extends StatefulWidget {
   final FlutterSecureStorage storage;
@@ -52,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Text(
               "Howdy, please enter your credentials to login.",
               style: TextStyle(
-                fontSize: 20, // Adjusted font size
+                fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -65,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Text(
                   "Username:",
                   style: TextStyle(
-                    fontSize: 18, // Adjusted font size
+                    fontSize: 18,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -98,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Text(
                   "Password:",
                   style: TextStyle(
-                    fontSize: 18, // Adjusted font size
+                    fontSize: 18,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -130,32 +135,32 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FutureBuilder<bool>(
+                  onTap: () async {
+                    await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return FutureBuilder<bool>(
                           future: loginUser(),
                           builder: (context, snapshot) {
-                            if (snapshot.data!) {
-                              return HomeScreen(storage: widget.storage,);
-                            } else {
-                              return AlertDialog(
-                                title: const Text('Error'),
-                                content: const Text("Wrong credentials"),
-                                actions: <Widget>[
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop(); // Close the dialog
-                                    },
-                                    child: const Text('OK'),
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const LoadingWidget(message: "Howdy, welcome back!");
+                            } else if (snapshot.hasData && snapshot.data!) {
+                              Future.delayed(Duration.zero, () {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => HomeScreen(storage: widget.storage),
                                   ),
-                                ],
-                              );
+                                );
+                              });
+                              return const SizedBox.shrink();
+                            } else if (snapshot.hasError && snapshot.error is HttpException) {
+                              return const InvalidCredentialsError();
+                            } else {
+                              return const ServerError();
                             }
-                          }
-                        ),
-                      )
+                          },
+                        );
+                      },
                     );
                   },
                   child: Container(
@@ -169,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         "Login",
                         style: TextStyle(
-                          fontSize: 18, // Adjusted font size
+                          fontSize: 18,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -193,9 +198,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: const Text(
                 "Forgot Password?",
                 style: TextStyle(
-                fontSize: 18, // Adjusted font size
-                fontWeight: FontWeight.w400,
-                color: Colors.blue,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.blue,
                 ),
               ),
             ),
