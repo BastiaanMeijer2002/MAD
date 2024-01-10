@@ -5,8 +5,9 @@ import '../../models/Car.dart';
 class CarScreen extends StatefulWidget {
   final Car car;
   final bool isFavorite;
+  final bool isAvailable;
 
-  const CarScreen({Key? key, required this.car, required this.isFavorite}) : super(key: key);
+  const CarScreen({Key? key, required this.car, required this.isFavorite, required this.isAvailable}) : super(key: key);
 
   @override
   State<CarScreen> createState() => _CarScreenState();
@@ -14,7 +15,6 @@ class CarScreen extends StatefulWidget {
 
 class _CarScreenState extends State<CarScreen> {
   bool favorite = false;
-  bool isAvailable = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +38,7 @@ class _CarScreenState extends State<CarScreen> {
           Container(
             width: double.infinity,
             height: 286,
-            color: isAvailable ? const Color(0xFFFAD4D8) : const Color(0xFF9BBFB9),
+            color: widget.isAvailable ? const Color(0xFFFAD4D8) : const Color(0xFF9BBFB9),
             child: Center(child: Image.asset('assets/images/${widget.car.img}')),
           ),
           Container(
@@ -56,7 +56,7 @@ class _CarScreenState extends State<CarScreen> {
               child: Row(
                 children: [
                   Text(
-                    isAvailable ? "Currently available" : "Currently not available",
+                    widget.isAvailable ? "Currently available" : "Currently not available",
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,

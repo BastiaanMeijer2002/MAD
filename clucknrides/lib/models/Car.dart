@@ -19,7 +19,7 @@ class Car {
       capacity: json["nrOfSeats"] ?? 0,
       fuel: json["fuel"] ?? 'fuel',
       img: 'fiesta.png',
-      rate: json["price"],
+      rate: (json["price"] ?? 0.0).toDouble(),
     );
   }
 

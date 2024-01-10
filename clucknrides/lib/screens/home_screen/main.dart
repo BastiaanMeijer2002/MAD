@@ -1,10 +1,18 @@
+import 'dart:developer';
+
+import 'package:clucknrides/main.dart';
 import 'package:clucknrides/models/Car.dart';
 import 'package:clucknrides/screens/home_screen/filter_widget/main.dart';
 import 'package:clucknrides/screens/home_screen/list_item/main.dart';
 import 'package:clucknrides/screens/home_screen/sort_widget/main.dart';
 import 'package:clucknrides/services/fetch_cars.dart';
+import 'package:clucknrides/services/fetch_rentals.dart';
+import 'package:clucknrides/widgets/errors/server_error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import '../../models/Rental.dart';
+import '../../services/is_available.dart';
 
 class HomeScreen extends StatefulWidget {
   final FlutterSecureStorage storage;
@@ -19,15 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<List<Car>> futureCars;
   bool isFilterSelected = false;
   bool isSortSelected = false;
-
-  // List<Car> cars = [
-  //   Car(name: "Ford Fiesta", capacity: 4, fuel: 200, isAvailable: true, img: 'fiesta.png', rate: 1.25),
-  //   Car(name: "Ford Fiesta", capacity: 4, fuel: 200, isAvailable: false, img: 'fiesta.png', rate: 1.25),
-  //   Car(name: "Ford Fresta", capacity: 4, fuel: 200, isAvailable: false, img: 'fiesta.png', rate: 1.25),
-  //   Car(name: "Ford Fresta", capacity: 4, fuel: 200, isAvailable: true, img: 'fiesta.png', rate: 1.25),
-  //   Car(name: "Ford Fresta", capacity: 4, fuel: 200, isAvailable: false, img: 'fiesta.png', rate: 1.25),
-  //   Car(name: "Ford Fresta", capacity: 4, fuel: 200, isAvailable: true, img: 'fiesta.png', rate: 1.25),
-  // ];
 
   @override
   void initState() {
@@ -49,29 +48,37 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body:
-      Stack(
+      body: Stack(
         children: [
-          Positioned.fill(
-            top: 110,
+          Positioned(
+            top: 150,
+            left: 0,
+            right: 0,
+            bottom: 0,
             child: FutureBuilder<List<Car>>(
               future: futureCars,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List<Car> carlist = snapshot.data as List<Car>;
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: const ClampingScrollPhysics(),
-                      itemCount: carlist.length,
-                      itemBuilder: (context, index) {
-                        return ListItem(
-                          carlist[index],
-                        );
-                      },
-                    );
-                  }
-                  return const CircularProgressIndicator();
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Car> carlist = snapshot.data as List<Car>;
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    itemCount: carlist.length,
+                    itemBuilder: (context, index) {
+                      return FutureBuilder(
+                        future: isAvailable(widget.storage, carlist[index]),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData){
+                            return ListItem(carlist[index], snapshot.data as bool);
+                          }
+                          return Container();
+                        },
+                      );
+                    },
+                  );
                 }
+                return const CircularProgressIndicator();
+              },
             ),
           ),
           if (isFilterSelected || isSortSelected)
@@ -86,8 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           Positioned(
-            top: 10,
-            left: 2,
+            top: 55,
+            left: MediaQuery.of(context).size.width * 0.01,
             child: SortWidget(
               onPressed: () {
                 setState(() {
@@ -97,8 +104,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-            top: 10,
-            right: 28,
+            top: 55,
+            right: MediaQuery.of(context).size.width * 0.07,
             child: FilterWidget(
               onPressed: () {
                 setState(() {
@@ -107,8 +114,21 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
+          Positioned(
+            top: 28,
+            left: MediaQuery.of(context).size.width * 0.07,
+            right: MediaQuery.of(context).size.width * 0.06,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.85,
+              height: MediaQuery.of(context).size.height * 0.05,
+              decoration: const BoxDecoration(
+                color: Color(0XFFFAD4D8),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
+            ),
+          ),
         ],
-      )
+      ),
     );
   }
 }

@@ -5,17 +5,17 @@ import '../../../models/Car.dart';
 
 class ListItem extends StatelessWidget {
   final Car car;
+  final bool isAvailable;
 
-  const ListItem(this.car, {super.key});
+  const ListItem(this.car, this.isAvailable, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    const isAvailable = true;
     return GestureDetector(
       onTap: (){
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CarScreen(car: car, isFavorite: false))
+          MaterialPageRoute(builder: (context) => CarScreen(car: car, isFavorite: false, isAvailable: isAvailable,))
         );
       },
       child: Stack(
@@ -47,10 +47,10 @@ class ListItem extends StatelessWidget {
                             bottomRight: Radius.circular(8)
                         )
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
                         isAvailable ? "Available" : "Not available",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w300,
                             color: Color(0xFFF1ECEC)
