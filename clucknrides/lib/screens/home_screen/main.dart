@@ -13,6 +13,15 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../models/Rental.dart';
 import '../../services/is_available.dart';
+import '../../widgets/loading_widget/main.dart';
+
+enum CarSortOption {
+  lowestPrice,
+  highestSeating,
+  closest,
+  highestEngine,
+  newest
+}
 
 class HomeScreen extends StatefulWidget {
   final FlutterSecureStorage storage;
@@ -27,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<List<Car>> futureCars;
   bool isFilterSelected = false;
   bool isSortSelected = false;
+  CarSortOption currentSortOption = CarSortOption.closest;
 
   @override
   void initState() {
@@ -34,10 +44,30 @@ class _HomeScreenState extends State<HomeScreen> {
     futureCars = fetchCars(widget.storage);
   }
 
+  List<Car> _getSortedCarList(List<Car> carList) {
+    switch (currentSortOption) {
+      case CarSortOption.closest:
+        return carList;
+      case CarSortOption.lowestPrice:
+        carList.sort((a, b) => a.rate.compareTo(b.rate));
+        return carList;
+      case CarSortOption.highestSeating:
+        carList.sort((a, b) => b.capacity.compareTo(a.capacity));
+        return carList;
+      case CarSortOption.highestEngine:
+        carList.sort((a, b) => b.engineSize.compareTo(a.engineSize));
+        return carList;
+      case CarSortOption.newest:
+        carList.sort((a, b) => b.modelYear.compareTo(a.modelYear));
+        return carList;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xff0f110c),
         title: const Text(
           "Cluck'N'Rides",
@@ -59,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
               future: futureCars,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  List<Car> carlist = snapshot.data as List<Car>;
+                  List<Car> carlist = _getSortedCarList(snapshot.data as List<Car>);
                   return ListView.builder(
                     shrinkWrap: true,
                     physics: const ClampingScrollPhysics(),
@@ -77,18 +107,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   );
                 }
-                return const CircularProgressIndicator();
+                return const LoadingWidget(message: "Loading the chickens...");
               },
             ),
           ),
           if (isFilterSelected || isSortSelected)
-            AnimatedOpacity(
-              duration: const Duration(milliseconds: 100),
-              opacity: isFilterSelected || isSortSelected ? 0.5 : 0.0,
-              child: const Positioned.fill(
-                child: ModalBarrier(
-                  color: Color(0xFF0F110C),
-                  dismissible: false,
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  isSortSelected = !isSortSelected;
+                });
+              },
+              child:
+              AnimatedOpacity(
+                duration: const Duration(milliseconds: 100),
+                opacity: isFilterSelected || isSortSelected ? 0.5 : 0.0,
+                child: const Positioned.fill(
+                  child: ModalBarrier(
+                    color: Color(0xFF0F110C),
+                    dismissible: false,
+                  ),
                 ),
               ),
             ),
@@ -96,11 +134,17 @@ class _HomeScreenState extends State<HomeScreen> {
             top: 55,
             left: MediaQuery.of(context).size.width * 0.01,
             child: SortWidget(
-              onPressed: () {
+              onSortSelected: (sortOption) {
                 setState(() {
-                  isSortSelected = !isSortSelected;
+                  currentSortOption = sortOption;
                 });
+              }, onPressed: () {
+                  setState(() {
+                    isSortSelected = !isSortSelected;
+                  }
+                );
               },
+              currentOption: currentSortOption,
             ),
           ),
           Positioned(

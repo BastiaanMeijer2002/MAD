@@ -196,25 +196,25 @@ class _CarScreenState extends State<CarScreen> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 30, right: 15),
                 child: Row(
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF9BBFB9),
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        width: 190,
-                        height: 40,
-                        child: const Center(
-                          child: Text(
-                            "Book for later",
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w400
-                            ),
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF9BBFB9),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      width: 190,
+                      height: 40,
+                      child: const Center(
+                        child: Text(
+                          "Book for later",
+                          style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w400
                           ),
                         ),
                       ),
-                    ]
+                    ),
+                  ]
                 ),
               ),
             ],

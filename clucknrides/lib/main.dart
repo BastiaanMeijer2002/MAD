@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFD6FFB7),
         useMaterial3: true,
       ),
-      home: const StartScreen(storage: storage,),
+      home: const StartScreen(storage: storage),
     );
   }
 }

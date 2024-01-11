@@ -7,7 +7,7 @@ Future<bool> isAvailable(FlutterSecureStorage storage, Car car) async {
   List<Rental> rentals = await fetchRentals(storage);
 
   for (Rental rental in rentals) {
-    if (rental.car.toJson().toString() == car.toJson().toString()) {
+    if (rental.car.toJson().toString() == car.toJson().toString() && rental.state != "RETURNED") {
       return false;
     }
   }
