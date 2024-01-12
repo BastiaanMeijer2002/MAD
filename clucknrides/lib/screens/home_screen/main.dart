@@ -1,17 +1,12 @@
-import 'dart:developer';
+import 'dart:ffi';
 
-import 'package:clucknrides/main.dart';
 import 'package:clucknrides/models/Car.dart';
 import 'package:clucknrides/screens/home_screen/filter_widget/main.dart';
 import 'package:clucknrides/screens/home_screen/list_item/main.dart';
 import 'package:clucknrides/screens/home_screen/sort_widget/main.dart';
 import 'package:clucknrides/services/fetch_cars.dart';
-import 'package:clucknrides/services/fetch_rentals.dart';
-import 'package:clucknrides/widgets/errors/server_error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import '../../models/Rental.dart';
 import '../../services/is_available.dart';
 import '../../widgets/loading_widget/main.dart';
 
@@ -21,6 +16,14 @@ enum CarSortOption {
   closest,
   highestEngine,
   newest
+}
+
+enum CarFilterOption {
+  available,
+  seating,
+  engine,
+  price,
+  all
 }
 
 class HomeScreen extends StatefulWidget {
@@ -37,6 +40,13 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isFilterSelected = false;
   bool isSortSelected = false;
   CarSortOption currentSortOption = CarSortOption.closest;
+  CarFilterOption currentFilterOption = CarFilterOption.all;
+  Map<CarFilterOption, dynamic> carFilterOptions = {
+    CarFilterOption.available: false,
+    CarFilterOption.seating: 5,
+    CarFilterOption.engine: 2,
+    CarFilterOption.price: 100,
+  };
 
   @override
   void initState() {
@@ -62,6 +72,19 @@ class _HomeScreenState extends State<HomeScreen> {
         return carList;
     }
   }
+
+  // List<Car> _getFilteredCarList(List<Car> carlist) async {
+  //   bool filterByAvailable = carFilterOptions[CarFilterOption.available] ?? false;
+  //   int filterBySeating = carFilterOptions[CarFilterOption.seating] ?? 0;
+  //   int filterByEngine = carFilterOptions[CarFilterOption.engine] ?? 0;
+  //   int filterByPrice = carFilterOptions[CarFilterOption.price] ?? 0;
+  //
+  //   return carlist.where((car) {
+  //     if (filterByAvailable && !car.available) {
+  //       return false;
+  //     }
+  //   }).toList();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +179,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   isFilterSelected = !isFilterSelected;
                 });
               },
+              onFilterSelected: (filterOption, value) {
+                setState(() {
+                  carFilterOptions[filterOption] = value;
+                });
+              },
+              carFilterList: carFilterOptions,
             ),
           ),
           Positioned(

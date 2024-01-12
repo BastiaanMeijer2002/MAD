@@ -28,7 +28,7 @@ class _SortWidgetState extends State<SortWidget> {
         AnimatedContainer(
           margin: const EdgeInsets.only(left: 27, top: 30, right: 0, bottom: 0),
           duration: const Duration(milliseconds: 100),
-          height: showList ? 350.0 : 50.0,
+          height: showList ? MediaQuery.of(context).size.height * 0.38 : MediaQuery.of(context).size.height * 0.05,
           child: GestureDetector(
             onTap: () {
               setState(() {
@@ -92,8 +92,8 @@ class _SortWidgetState extends State<SortWidget> {
       title: Text(
         title,
         style: const TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          fontSize: 18,
         ),
       ),
       trailing: isSelected ? const Icon(Icons.check) : null,
@@ -101,6 +101,7 @@ class _SortWidgetState extends State<SortWidget> {
         widget.onSortSelected(option);
         setState(() {
           showList = false;
+          widget.onPressed();
         });
       },
     );
