@@ -73,18 +73,28 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // List<Car> _getFilteredCarList(List<Car> carlist) async {
-  //   bool filterByAvailable = carFilterOptions[CarFilterOption.available] ?? false;
-  //   int filterBySeating = carFilterOptions[CarFilterOption.seating] ?? 0;
-  //   int filterByEngine = carFilterOptions[CarFilterOption.engine] ?? 0;
-  //   int filterByPrice = carFilterOptions[CarFilterOption.price] ?? 0;
-  //
-  //   return carlist.where((car) {
-  //     if (filterByAvailable && !car.available) {
-  //       return false;
-  //     }
-  //   }).toList();
-  // }
+  List<Car> _getFilteredCarList(List<Car> carlist) {
+    bool filterByAvailable = carFilterOptions[CarFilterOption.available] ?? false;
+    double filterBySeating = (carFilterOptions[CarFilterOption.seating] ?? 0).toDouble();
+    double filterByEngine = (carFilterOptions[CarFilterOption.engine] ?? 0).toDouble();
+    double filterByPrice = (carFilterOptions[CarFilterOption.price] ?? 0).toDouble();
+
+    return carlist.where((car)  {
+      if (filterByPrice > 0 && car.rate > filterByPrice) {
+        return false;
+      }
+
+      if (filterByEngine > 0 && car.engineSize < filterByEngine) {
+        return false;
+      }
+
+      if (filterBySeating > 0 && car.capacity < filterBySeating) {
+        return false;
+      }
+
+      return true;
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<Car> carlist = _getSortedCarList(snapshot.data as List<Car>);
+                  carlist = _getFilteredCarList(carlist);
                   return ListView.builder(
                     shrinkWrap: true,
                     physics: const ClampingScrollPhysics(),
@@ -122,6 +133,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         future: isAvailable(widget.storage, carlist[index]),
                         builder: (context, snapshot) {
                           if (snapshot.hasData){
+                            if (carFilterOptions[CarFilterOption.available] && !snapshot.data!) {
+                              return Container();
+                            }
                             return ListItem(carlist[index], snapshot.data as bool);
                           }
                           return Container();

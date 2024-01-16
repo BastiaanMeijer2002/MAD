@@ -27,7 +27,6 @@ class _FilterWidgetState extends State<FilterWidget> {
     engineSliderValue = widget.carFilterList[CarFilterOption.engine].toDouble() ?? 1.0;
     priceSliderValue = widget.carFilterList[CarFilterOption.price].toDouble() ?? 1.0;
     availabiltyValue = widget.carFilterList[CarFilterOption.available] ?? false;
-
   }
 
   @override
@@ -160,14 +159,14 @@ class _FilterWidgetState extends State<FilterWidget> {
                         ),
                         Slider(
                           value: priceSliderValue,
-                          min: 10.0,
-                          max: 100.0,
+                          min: 0.0,
+                          max: 200.0,
                           divisions: 10,
                           label: priceSliderValue.round().toString(),
                           onChanged: (double value) {
                             setState(() {
                               priceSliderValue = value;
-                              widget.onFilterSelected(CarFilterOption.engine, value);
+                              widget.onFilterSelected(CarFilterOption.price, value);
                             });
                           },
                         ),
@@ -202,14 +201,23 @@ class _FilterWidgetState extends State<FilterWidget> {
                       ],
                     ),
                   ),
-                  // Row(
-                  //   FilledButton(
-                  //     onPressed: () {
-                  //
-                  //     },
-                  //     child: const Text('Enabled'),
-                  //   ),
-                  // )
+                  Row(
+                    children: [
+                      const Spacer(),
+                      Padding(
+                        padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.05),
+                        child: FilledButton(
+                          onPressed: () {
+                            setState(() {
+                              showList = !showList;
+                            });
+                            widget.onPressed();
+                          },
+                          child: const Text('Filter'),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
