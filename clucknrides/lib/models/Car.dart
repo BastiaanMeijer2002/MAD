@@ -6,6 +6,8 @@ class Car {
   int engineSize;
   int modelYear;
   String img;
+  double longitude;
+  double latitude;
 
   Car({
     required this.name,
@@ -15,6 +17,8 @@ class Car {
     required this.rate,
     required this.engineSize,
     required this.modelYear,
+    required this.longitude,
+    required this.latitude,
   });
 
   factory Car.fromJson(Map<String, dynamic> json) {
@@ -26,6 +30,8 @@ class Car {
       rate: (json["price"] ?? 0.0).toDouble(),
       engineSize: json["engineSize"] ?? 0,
       modelYear: json["modelYear"] ?? 0,
+      longitude: json["longitude"] ?? 0.0,
+      latitude: json["latitude"] ?? 0.0,
     );
   }
 
@@ -38,6 +44,8 @@ class Car {
       'rate': rate,
       'engineSize': engineSize,
       'modelYear': modelYear,
+      'longitude': longitude,
+      'latitude': latitude,
     };
   }
 }

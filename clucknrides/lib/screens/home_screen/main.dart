@@ -5,8 +5,11 @@ import 'package:clucknrides/screens/home_screen/filter_widget/main.dart';
 import 'package:clucknrides/screens/home_screen/list_item/main.dart';
 import 'package:clucknrides/screens/home_screen/sort_widget/main.dart';
 import 'package:clucknrides/services/fetch_cars.dart';
+import 'package:clucknrides/services/get_location.dart';
+import 'package:clucknrides/services/reverse_geocode.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../services/is_available.dart';
 import '../../widgets/loading_widget/main.dart';
 
@@ -47,16 +50,40 @@ class _HomeScreenState extends State<HomeScreen> {
     CarFilterOption.engine: 2,
     CarFilterOption.price: 100,
   };
+  Position? _currentPosition;
 
   @override
   void initState() {
     super.initState();
     futureCars = fetchCars(widget.storage);
+    _getLocation();
   }
 
   List<Car> _getSortedCarList(List<Car> carList) {
     switch (currentSortOption) {
       case CarSortOption.closest:
+        if (_currentPosition == null) {
+          return carList;
+        }
+
+        carList.sort((a, b) {
+          double distanceToA = Geolocator.distanceBetween(
+            _currentPosition!.latitude,
+            _currentPosition!.longitude,
+            a.latitude,
+            a.longitude,
+          );
+
+          double distanceToB = Geolocator.distanceBetween(
+            _currentPosition!.latitude,
+            _currentPosition!.longitude,
+            b.latitude,
+            b.longitude,
+          );
+
+          return distanceToA.compareTo(distanceToB);
+        });
+
         return carList;
       case CarSortOption.lowestPrice:
         carList.sort((a, b) => a.rate.compareTo(b.rate));
@@ -136,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             if (carFilterOptions[CarFilterOption.available] && !snapshot.data!) {
                               return Container();
                             }
-                            return ListItem(carlist[index], snapshot.data as bool);
+                            return ListItem(carlist[index], snapshot.data as bool, location: _currentPosition,);
                           }
                           return Container();
                         },
@@ -212,10 +239,62 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Color(0XFFFAD4D8),
                 borderRadius: BorderRadius.all(Radius.circular(8)),
               ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    const Icon(Icons.near_me),
+                    const SizedBox(width: 15.0),
+                    FutureBuilder(
+                      future: reverseGeocode(_currentPosition?.longitude ?? 0.0, _currentPosition?.latitude ?? 0.0),
+                      builder: (context, snapshot) {
+                        return Text(
+                          snapshot.data ?? "No location found",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                          ),
+                        );
+                      }
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
         ],
       ),
     );
   }
+
+  Future<void> _getLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
+          return;
+        }
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      setState(() {
+        _currentPosition = position;
+        print("long: ${_currentPosition?.longitude} lat: ${_currentPosition?.latitude}");
+      });
+
+      Geolocator.getPositionStream().listen((Position position) {
+        setState(() {
+          _currentPosition = position;
+        });
+      });
+    } catch (e) {
+      print('Error getting location: $e');
+    }
+  }
+
 }
