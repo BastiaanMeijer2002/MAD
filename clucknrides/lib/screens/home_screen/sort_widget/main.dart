@@ -11,7 +11,8 @@ class SortWidget extends StatefulWidget {
   const SortWidget({
     Key? key,
     required this.onPressed,
-    required this.onSortSelected, required this.currentOption,
+    required this.onSortSelected,
+    required this.currentOption,
   }) : super(key: key);
 
   @override
@@ -23,12 +24,20 @@ class _SortWidgetState extends State<SortWidget> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Stack(
       children: [
         AnimatedContainer(
-          margin: const EdgeInsets.only(left: 27, top: 30, right: 0, bottom: 0),
+          margin: EdgeInsets.only(
+            left: screenWidth * 0.063, // 27 / 926
+            top: screenHeight * 0.032, // 30 / 926
+            right: 0,
+            bottom: 0,
+          ),
           duration: const Duration(milliseconds: 100),
-          height: showList ? MediaQuery.of(context).size.height * 0.38 : MediaQuery.of(context).size.height * 0.05,
+          height: showList ? screenHeight * 0.4105 : screenHeight * 0.05, // 0.38 : 0.05
           child: GestureDetector(
             onTap: () {
               setState(() {
@@ -37,7 +46,7 @@ class _SortWidgetState extends State<SortWidget> {
               widget.onPressed();
             },
             child: Container(
-              width: 175,
+              width: screenWidth * 0.409, // 175 / 926
               padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
                 color: const Color(0xFFFAD4D8),
@@ -61,12 +70,17 @@ class _SortWidgetState extends State<SortWidget> {
         ),
         if (showList)
           Positioned(
-            top: 50.0,
+            top: screenHeight * 0.054 + screenHeight * 0.032, // 0.054 : 0.032
             left: 0.0,
             right: 0.0,
             bottom: 0.0,
             child: Container(
-              margin: const EdgeInsets.only(left: 27, top: 30, right: 0, bottom: 0),
+              margin: EdgeInsets.only(
+                left: screenWidth * 0.063, // 27 / 926
+                top: screenHeight * 0.032, // 30 / 926
+                right: 0,
+                bottom: 0,
+              ),
               decoration: BoxDecoration(
                 color: const Color(0xFFFAD4D8),
                 borderRadius: BorderRadius.circular(8),
@@ -77,7 +91,7 @@ class _SortWidgetState extends State<SortWidget> {
                   buildListTile("Lowest price", CarSortOption.lowestPrice),
                   buildListTile("Most seats", CarSortOption.highestSeating),
                   buildListTile("Highest engine size", CarSortOption.highestEngine),
-                  buildListTile("Newest", CarSortOption.newest)
+                  buildListTile("Newest", CarSortOption.newest),
                 ],
               ),
             ),

@@ -9,7 +9,6 @@ class ListItem extends StatefulWidget {
   final bool isAvailable;
   final Position? location;
 
-
   const ListItem(this.car, this.isAvailable, {Key? key, this.location}) : super(key: key);
 
   @override
@@ -33,13 +32,17 @@ class _ListItemState extends State<ListItem> {
         widget.location!.longitude,
         widget.car.latitude,
         widget.car.longitude,
-      ) / 1000;
+      ) /
+          1000;
     }
     return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -66,15 +69,20 @@ class _ListItemState extends State<ListItem> {
                 width: 1.0,
               ),
             ),
-            margin: const EdgeInsets.only(left: 27, top: 0, bottom: 23, right: 0),
-            width: 373,
-            height: 242,
+            margin: EdgeInsets.only(
+              left: screenWidth * 0.063,
+              top: 0,
+              bottom: screenHeight * 0.025,
+              right: 0,
+            ),
+            width: screenWidth * 0.871,
+            height: screenHeight * 0.262,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 105,
-                  height: 30,
+                  width: screenWidth * 0.245,
+                  height: screenHeight * 0.032,
                   decoration: const BoxDecoration(
                     color: Color(0xFF0F110C),
                     borderRadius: BorderRadius.only(
@@ -98,14 +106,14 @@ class _ListItemState extends State<ListItem> {
                 Center(
                   child: Image.asset(
                     'assets/images/${widget.car.img}',
-                    width: 500,
-                    height: 154,
+                    width: screenWidth * 0.539, // 500 / 926
+                    height: screenHeight * 0.166, // 154 / 926
                   ),
                 ),
                 const Spacer(),
                 Container(
                   width: double.infinity,
-                  height: 56,
+                  height: screenHeight * 0.0605, // 56 / 926
                   decoration: const BoxDecoration(
                     color: Color(0xFF0F110C),
                     borderRadius: BorderRadius.only(
@@ -118,7 +126,7 @@ class _ListItemState extends State<ListItem> {
                   child: Row(
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(left: 17),
+                        margin: EdgeInsets.only(left: screenWidth * 0.040), // 17 / 926
                         child: Text(
                           widget.car.name,
                           style: const TextStyle(
@@ -130,16 +138,16 @@ class _ListItemState extends State<ListItem> {
                       ),
                       const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.only(right: 9),
+                        padding: EdgeInsets.only(right: screenWidth * 0.020), // 9 / 926
                         child: Row(
                           children: [
                             SvgPicture.asset(
                               'assets/icons/people.svg',
-                              width: 24,
-                              height: 24,
+                              width: screenWidth * 0.026, // 24 / 926
+                              height: screenHeight * 0.026, // 24 / 926
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 7),
+                              padding: EdgeInsets.only(left: screenWidth * 0.007), // 7 / 926
                               child: Text(
                                 widget.car.capacity.toString(),
                                 style: const TextStyle(
@@ -150,14 +158,14 @@ class _ListItemState extends State<ListItem> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 14),
+                              padding: EdgeInsets.only(left: screenWidth * 0.014), // 14 / 926
                               child: Row(
                                 children: [
                                   Image.asset('assets/icons/location.png'),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 7),
+                                    padding: EdgeInsets.only(left: screenWidth * 0.007), // 7 / 926
                                     child: Text(
-                                      "${_calculateDistance()!.toStringAsFixed(1)} KM",
+                                      "${_calculateDistance()?.toStringAsFixed(1) ?? 0.0} KM",
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,

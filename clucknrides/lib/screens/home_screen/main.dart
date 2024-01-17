@@ -125,6 +125,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -141,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           Positioned(
-            top: 150,
+            top: screenHeight * 0.162, // 150 / 926
             left: 0,
             right: 0,
             bottom: 0,
@@ -195,25 +198,25 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           Positioned(
-            top: 55,
-            left: MediaQuery.of(context).size.width * 0.01,
+            top: screenHeight * 0.059, // 55 / 926
+            left: screenWidth * 0.01,
             child: SortWidget(
               onSortSelected: (sortOption) {
                 setState(() {
                   currentSortOption = sortOption;
                 });
               }, onPressed: () {
-                  setState(() {
-                    isSortSelected = !isSortSelected;
-                  }
-                );
-              },
+              setState(() {
+                isSortSelected = !isSortSelected;
+              }
+              );
+            },
               currentOption: currentSortOption,
             ),
           ),
           Positioned(
-            top: 55,
-            right: MediaQuery.of(context).size.width * 0.07,
+            top: screenHeight * 0.059, // 55 / 926
+            right: screenWidth * 0.07,
             child: FilterWidget(
               onPressed: () {
                 setState(() {
@@ -229,12 +232,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-            top: 28,
-            left: MediaQuery.of(context).size.width * 0.07,
-            right: MediaQuery.of(context).size.width * 0.06,
+            top: screenHeight * 0.03, // 28 / 926
+            left: screenWidth * 0.07,
+            right: screenWidth * 0.06,
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              height: MediaQuery.of(context).size.height * 0.05,
+              width: screenWidth * 0.85,
+              height: screenHeight * 0.054, // 50 / 926
               decoration: const BoxDecoration(
                 color: Color(0XFFFAD4D8),
                 borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -246,16 +249,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     const Icon(Icons.near_me),
                     const SizedBox(width: 15.0),
                     FutureBuilder(
-                      future: reverseGeocode(_currentPosition?.longitude ?? 0.0, _currentPosition?.latitude ?? 0.0),
-                      builder: (context, snapshot) {
-                        return Text(
-                          snapshot.data ?? "No location found",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                          ),
-                        );
-                      }
+                        future: reverseGeocode(_currentPosition?.longitude ?? 0.0, _currentPosition?.latitude ?? 0.0),
+                        builder: (context, snapshot) {
+                          return Text(
+                            snapshot.data ?? "No location found",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                          );
+                        }
                     )
                   ],
                 ),
@@ -296,5 +299,4 @@ class _HomeScreenState extends State<HomeScreen> {
       print('Error getting location: $e');
     }
   }
-
 }
