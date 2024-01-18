@@ -8,7 +8,6 @@ Future<String> reverseGeocode(double long, double lat) async {
 
   if (response.statusCode == 200) {
     final Map<String, dynamic> data = jsonDecode(response.body);
-    // print(data['address']);
     return "${data['address']["road"]}, ${data['address']['city'] ?? data['address']['town'] ?? data['address']['state'] ?? data['address']['country']}";
   } else {
     return "No location found";
