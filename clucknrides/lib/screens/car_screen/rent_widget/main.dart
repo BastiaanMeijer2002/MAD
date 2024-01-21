@@ -15,8 +15,9 @@ class RentWidget extends StatefulWidget {
   final Car car;
   final CustomerRepository customers;
   final RentalRepository rentals;
+  final bool available;
 
-  const RentWidget({Key? key, required this.car, required this.customers, required this.storage, required this.rentals}) : super(key: key);
+  const RentWidget({Key? key, required this.car, required this.customers, required this.storage, required this.rentals, required this.available}) : super(key: key);
 
   @override
   State<RentWidget> createState() => _RentWidgetState();
@@ -38,6 +39,8 @@ class _RentWidgetState extends State<RentWidget> {
     isActive = await widget.rentals.isActiveRent(widget.car, currentCustomer);
     if (isActive) {
       activeRent(context);
+      active = true;
+
     }
   }
 
@@ -56,6 +59,16 @@ class _RentWidgetState extends State<RentWidget> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+
+    if (!widget.available && !active) {
+      return Padding(
+        padding: EdgeInsets.only(bottom: screenHeight * 0.032, left: screenWidth * 0.035, right: screenWidth * 0.035),
+        child: SizedBox(
+          width: screenWidth * 0.444,
+          height: screenHeight * 0.043,
+        ),
+      );
+    }
 
     return Padding(
       padding: EdgeInsets.only(bottom: screenHeight * 0.032, left: screenWidth * 0.035, right: screenWidth * 0.035),

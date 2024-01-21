@@ -9,8 +9,6 @@ import 'package:http/http.dart' as http;
 import '../models/Customer.dart';
 
 Future<bool> authenticateUser(String username, String password, FlutterSecureStorage storage, CustomerRepository customerRepository) async {
-  print("${dotenv.env["API_BASE_URL"]}/api/authenticate");
-  print('$username $password');
   final response = await http.post(
     Uri.parse("${dotenv.env["API_BASE_URL"]}/api/authenticate"),
     headers: <String, String>{
@@ -22,11 +20,6 @@ Future<bool> authenticateUser(String username, String password, FlutterSecureSto
       "rememberMe": false
     })
   );
-
-  print(response.statusCode.toString());
-  print(response.body.toString());
-
-
 
   if (response.statusCode == 200) {
     final Map<String, dynamic> jsonData = json.decode(response.body);

@@ -291,7 +291,7 @@ class _CarScreenState extends State<CarScreen> {
           SizedBox(height: screenHeight * 0.03),
           Row(
             children: [
-              RentWidget(car: widget.car, storage: widget.storage, customers: widget.customers, rentals: widget.rentals,),
+              RentWidget(car: widget.car, storage: widget.storage, customers: widget.customers, rentals: widget.rentals, available: widget.isAvailable,),
               Padding(
                 padding: EdgeInsets.only(bottom: screenHeight * 0.032, right: screenWidth * 0.035), // 30 / 926, 15 / 428
                 child: Row(

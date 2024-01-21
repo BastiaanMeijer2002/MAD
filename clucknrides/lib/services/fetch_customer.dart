@@ -15,8 +15,6 @@ Future<Customer> fetchCustomer(FlutterSecureStorage storage, CustomerRepository 
     },
   );
 
-  print(response.body.toString());
-
   if (response.statusCode == 200) {
     Map<String, dynamic> jsonResponse = json.decode(response.body);
     return Customer.fromJson(jsonResponse);
