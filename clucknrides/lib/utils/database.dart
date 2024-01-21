@@ -11,10 +11,11 @@ class DatabaseProvider {
       final database = await openDatabase(
         join(await getDatabasesPath(), 'data.db'),
         onCreate: (db, version) async{
-          await db.execute('CREATE TABLE rentals (id INTEGER PRIMARY KEY, code TEXT, longitude REAL, latitude REAL, fromDate TEXT, toDate TEXT, state TEXT, carId INTEGER, FOREIGN KEY (carId) REFERENCES cars(id));');
-          await db.execute('CREATE TABLE cars (id INTEGER PRIMARY KEY, brand TEXT, model TEXT, fuel TEXT, options TEXT, licensePlate TEXT, engineSize INTEGER, modelYear INTEGER, since TEXT, price INTEGER, nrOfSeats INTEGER, body TEXT);');
+          await db.execute('CREATE TABLE cars (id INTEGER PRIMARY KEY UNIQUE, brand TEXT, model TEXT, fuel TEXT, options TEXT, licensePlate TEXT, engineSize INTEGER, modelYear INTEGER, since TEXT, price INTEGER, nrOfSeats INTEGER, body TEXT, img TEXT,longitude REAL,latitude REAL);');
+          await db.execute('CREATE TABLE customers (id INTEGER PRIMARY KEY UNIQUE, number INTEGER, lastName TEXT, firstName TEXT, "from" TEXT);');
+          await db.execute('CREATE TABLE rentals (id INTEGER PRIMARY KEY UNIQUE,code TEXT,longitude REAL,latitude REAL,fromDate TEXT,toDate TEXT,state TEXT,carId INTEGER,customerId INTEGER,FOREIGN KEY (carId) REFERENCES cars(id),FOREIGN KEY (customerId) REFERENCES customers(id));');
         },
-        version: 2,
+        version: 3,
       );
       return database;
     } catch (e) {

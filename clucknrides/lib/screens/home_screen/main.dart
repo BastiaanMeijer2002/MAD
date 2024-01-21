@@ -1,24 +1,28 @@
-import 'dart:ffi';
-
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:clucknrides/models/Car.dart';
+import 'package:clucknrides/repositories/rentalRepository.dart';
+import 'package:clucknrides/repositories/customerRepository.dart';
+import 'package:clucknrides/repositories/carRepository.dart';
 import 'package:clucknrides/screens/home_screen/filter_widget/main.dart';
 import 'package:clucknrides/screens/home_screen/list_item/main.dart';
 import 'package:clucknrides/screens/home_screen/sort_widget/main.dart';
 import 'package:clucknrides/services/fetch_cars.dart';
-import 'package:clucknrides/services/get_location.dart';
+import 'package:clucknrides/services/fetch_rentals.dart';
 import 'package:clucknrides/services/reverse_geocode.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:geolocator/geolocator.dart';
-import '../../services/is_available.dart';
-import '../../widgets/loading_widget/main.dart';
+import 'package:clucknrides/services/fetch_customers.dart';
+import 'package:clucknrides/services/is_available.dart';
+import 'package:clucknrides/widgets/loading_widget/main.dart';
+
+import '../../models/Rental.dart';
 
 enum CarSortOption {
   lowestPrice,
   highestSeating,
   closest,
   highestEngine,
-  newest
+  newest,
 }
 
 enum CarFilterOption {
@@ -26,20 +30,30 @@ enum CarFilterOption {
   seating,
   engine,
   price,
-  all
+  all,
 }
 
 class HomeScreen extends StatefulWidget {
   final FlutterSecureStorage storage;
+  final RentalRepository rentals;
+  final CustomerRepository customers;
+  final CarRepository cars;
 
-  const HomeScreen({Key? key, required this.storage}) : super(key: key);
+  const HomeScreen({
+    Key? key,
+    required this.storage,
+    required this.rentals,
+    required this.customers,
+    required this.cars,
+  }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with RouteAware {
   late Future<List<Car>> futureCars;
+  late List<Rental> rentals;
   bool isFilterSelected = false;
   bool isSortSelected = false;
   CarSortOption currentSortOption = CarSortOption.closest;
@@ -55,8 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    futureCars = fetchCars(widget.storage);
+    _refreshCars();
     _getLocation();
+    fetchRentals(widget.storage, widget.rentals);
+    fetchCustomers(widget.storage, widget.customers);
   }
 
   List<Car> _getSortedCarList(List<Car> carList) {
@@ -86,10 +102,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return carList;
       case CarSortOption.lowestPrice:
-        carList.sort((a, b) => a.rate.compareTo(b.rate));
+        carList.sort((a, b) => a.price.compareTo(b.price));
         return carList;
       case CarSortOption.highestSeating:
-        carList.sort((a, b) => b.capacity.compareTo(a.capacity));
+        carList.sort((a, b) => b.nrOfSeats.compareTo(a.nrOfSeats));
         return carList;
       case CarSortOption.highestEngine:
         carList.sort((a, b) => b.engineSize.compareTo(a.engineSize));
@@ -106,8 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
     double filterByEngine = (carFilterOptions[CarFilterOption.engine] ?? 0).toDouble();
     double filterByPrice = (carFilterOptions[CarFilterOption.price] ?? 0).toDouble();
 
-    return carlist.where((car)  {
-      if (filterByPrice > 0 && car.rate > filterByPrice) {
+    return carlist.where((car) {
+      if (filterByPrice > 0 && car.price > filterByPrice) {
         return false;
       }
 
@@ -115,12 +131,24 @@ class _HomeScreenState extends State<HomeScreen> {
         return false;
       }
 
-      if (filterBySeating > 0 && car.capacity < filterBySeating) {
+      if (filterBySeating > 0 && car.nrOfSeats < filterBySeating) {
         return false;
       }
 
       return true;
     }).toList();
+  }
+
+  Future<void> _refreshCars() async {
+    setState(() {
+      futureCars = fetchCars(widget.storage, widget.cars);
+    });
+  }
+
+  Future<void> _onRefresh() async {
+    // Fetch the updated car list when the user pulls down to refresh
+    await _refreshCars();
+    await Future.delayed(const Duration(seconds: 1));
   }
 
   @override
@@ -141,114 +169,123 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: Stack(
-        children: [
-          Positioned(
-            top: screenHeight * 0.162, // 150 / 926
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: FutureBuilder<List<Car>>(
-              future: futureCars,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<Car> carlist = _getSortedCarList(snapshot.data as List<Car>);
-                  carlist = _getFilteredCarList(carlist);
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    itemCount: carlist.length,
-                    itemBuilder: (context, index) {
-                      return FutureBuilder(
-                        future: isAvailable(widget.storage, carlist[index]),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData){
-                            if (carFilterOptions[CarFilterOption.available] && !snapshot.data!) {
-                              return Container();
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: Stack(
+          children: [
+            Positioned(
+              top: screenHeight * 0.162,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: FutureBuilder<List<Car>>(
+                future: futureCars,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Car> carlist = _getSortedCarList(snapshot.data as List<Car>);
+                    carlist = _getFilteredCarList(carlist);
+
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      itemCount: carlist.length,
+                      itemBuilder: (context, index) {
+                        return FutureBuilder(
+                          future: isAvailable(widget.storage, widget.rentals, carlist[index]),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if (carFilterOptions[CarFilterOption.available] && !snapshot.data!) {
+                                return Container();
+                              }
+                              return ListItem(
+                                carlist[index],
+                                snapshot.data as bool,
+                                location: _currentPosition,
+                                rentals: widget.rentals,
+                                customers: widget.customers,
+                                storage: widget.storage,
+                              );
                             }
-                            return ListItem(carlist[index], snapshot.data as bool, location: _currentPosition,);
-                          }
-                          return Container();
-                        },
-                      );
-                    },
-                  );
-                }
-                return const LoadingWidget(message: "Loading the chickens...");
-              },
+                            return const Text("test");
+                          },
+                        );
+                      },
+                    );
+                  }
+                  return const LoadingWidget(message: "Loading the chickens...");
+                },
+              ),
             ),
-          ),
-          if (isFilterSelected || isSortSelected)
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  isSortSelected = !isSortSelected;
-                });
-              },
-              child:
-              AnimatedOpacity(
-                duration: const Duration(milliseconds: 100),
-                opacity: isFilterSelected || isSortSelected ? 0.5 : 0.0,
-                child: const Positioned.fill(
-                  child: ModalBarrier(
-                    color: Color(0xFF0F110C),
-                    dismissible: false,
+            if (isFilterSelected || isSortSelected)
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isSortSelected = !isSortSelected;
+                  });
+                },
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 100),
+                  opacity: isFilterSelected || isSortSelected ? 0.5 : 0.0,
+                  child: const Positioned.fill(
+                    child: ModalBarrier(
+                      color: Color(0xFF0F110C),
+                      dismissible: false,
+                    ),
                   ),
                 ),
               ),
-            ),
-          Positioned(
-            top: screenHeight * 0.059, // 55 / 926
-            left: screenWidth * 0.01,
-            child: SortWidget(
-              onSortSelected: (sortOption) {
-                setState(() {
-                  currentSortOption = sortOption;
-                });
-              }, onPressed: () {
-              setState(() {
-                isSortSelected = !isSortSelected;
-              }
-              );
-            },
-              currentOption: currentSortOption,
-            ),
-          ),
-          Positioned(
-            top: screenHeight * 0.059, // 55 / 926
-            right: screenWidth * 0.07,
-            child: FilterWidget(
-              onPressed: () {
-                setState(() {
-                  isFilterSelected = !isFilterSelected;
-                });
-              },
-              onFilterSelected: (filterOption, value) {
-                setState(() {
-                  carFilterOptions[filterOption] = value;
-                });
-              },
-              carFilterList: carFilterOptions,
-            ),
-          ),
-          Positioned(
-            top: screenHeight * 0.03, // 28 / 926
-            left: screenWidth * 0.07,
-            right: screenWidth * 0.06,
-            child: Container(
-              width: screenWidth * 0.85,
-              height: screenHeight * 0.054, // 50 / 926
-              decoration: const BoxDecoration(
-                color: Color(0XFFFAD4D8),
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+            Positioned(
+              top: screenHeight * 0.059,
+              left: screenWidth * 0.01,
+              child: SortWidget(
+                onSortSelected: (sortOption) {
+                  setState(() {
+                    currentSortOption = sortOption;
+                  });
+                },
+                onPressed: () {
+                  setState(() {
+                    isSortSelected = !isSortSelected;
+                  });
+                },
+                currentOption: currentSortOption,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    const Icon(Icons.near_me),
-                    const SizedBox(width: 15.0),
-                    FutureBuilder(
+            ),
+            Positioned(
+              top: screenHeight * 0.059,
+              right: screenWidth * 0.07,
+              child: FilterWidget(
+                onPressed: () {
+                  setState(() {
+                    isFilterSelected = !isFilterSelected;
+                  });
+                },
+                onFilterSelected: (filterOption, value) {
+                  setState(() {
+                    carFilterOptions[filterOption] = value;
+                  });
+                },
+                carFilterList: carFilterOptions,
+              ),
+            ),
+            Positioned(
+              top: screenHeight * 0.03,
+              left: screenWidth * 0.07,
+              right: screenWidth * 0.06,
+              child: Container(
+                width: screenWidth * 0.85,
+                height: screenHeight * 0.054,
+                decoration: const BoxDecoration(
+                  color: Color(0XFFFAD4D8),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.near_me),
+                      const SizedBox(width: 15.0),
+                      FutureBuilder(
                         future: reverseGeocode(_currentPosition?.longitude ?? 0.0, _currentPosition?.latitude ?? 0.0),
                         builder: (context, snapshot) {
                           return Text(
@@ -258,14 +295,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 14,
                             ),
                           );
-                        }
-                    )
-                  ],
+                        },
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

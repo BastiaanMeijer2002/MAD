@@ -1,22 +1,36 @@
+import 'package:clucknrides/repositories/carRepository.dart';
+import 'package:clucknrides/repositories/customerRepository.dart';
+import 'package:clucknrides/repositories/rentalRepository.dart';
 import 'package:clucknrides/screens/home_screen/main.dart';
 import 'package:clucknrides/screens/start_screen.dart';
 import 'package:clucknrides/utils/database.dart';
 import 'package:clucknrides/widgets/loading_widget/main.dart';
 import 'package:dotenv/dotenv.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sqflite/sqflite.dart';
 
+
 void main() async {
   final database = await DatabaseProvider().initDatabase();
-  runApp(MyApp(database: database,));
+  final CustomerRepository customers = CustomerRepository(database);
+  final CarRepository cars = CarRepository(database);
+  final RentalRepository rentals = RentalRepository(database, customers, cars);
+  await dotenv.load(fileName: "lib/.env");
+  runApp(MyApp(database: database, customerRepository: customers, rentalRepository: rentals, carRepository: cars,));
 }
 
 class MyApp extends StatelessWidget {
   final Database database;
+  final CustomerRepository customerRepository;
+  final RentalRepository rentalRepository;
+  final CarRepository carRepository;
 
-  const MyApp({super.key, required this.database});
+
+  const MyApp({super.key, required this.database, required this.customerRepository, required this.rentalRepository, required this.carRepository});
   static const storage = FlutterSecureStorage();
+
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +41,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFD6FFB7),
         useMaterial3: true,
       ),
-      home: const StartScreen(storage: storage),
+      home: StartScreen(storage: storage, customers: customerRepository, rentals: rentalRepository, cars: carRepository),
     );
   }
 }

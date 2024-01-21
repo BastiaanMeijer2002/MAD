@@ -1,11 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:clucknrides/repositories/customerRepository.dart';
+import 'package:clucknrides/services/fetch_customer.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-Future<bool> authenticateUser(String username, String password, FlutterSecureStorage storage) async {
+import '../models/Customer.dart';
+
+Future<bool> authenticateUser(String username, String password, FlutterSecureStorage storage, CustomerRepository customerRepository) async {
+  print("${dotenv.env["API_BASE_URL"]}/api/authenticate");
+  print('$username $password');
   final response = await http.post(
-    Uri.parse("http://localhost:8080/api/authenticate"),
+    Uri.parse("${dotenv.env["API_BASE_URL"]}/api/authenticate"),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -16,10 +23,19 @@ Future<bool> authenticateUser(String username, String password, FlutterSecureSto
     })
   );
 
+  print(response.statusCode.toString());
+  print(response.body.toString());
+
+
+
   if (response.statusCode == 200) {
     final Map<String, dynamic> jsonData = json.decode(response.body);
     final String token = jsonData['id_token'];
     await storage.write(key: "jwt", value: token);
+
+    Customer customer = await fetchCustomer(storage, customerRepository);
+    await customerRepository.insertCustomer(customer);
+
     return true;
   } else if (response.statusCode == 401) {
     return false;

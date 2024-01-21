@@ -9,18 +9,6 @@ class LoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xff0f110c),
-        title: const Text(
-          "Cluck'N'Rides",
-          style: TextStyle(
-            color: Color(0xfffcf7f7),
-            fontFamily: "Inter",
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: true,
-      ),
       body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

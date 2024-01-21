@@ -1,15 +1,22 @@
+import 'package:clucknrides/repositories/customerRepository.dart';
 import 'package:clucknrides/screens/car_screen/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../../models/Car.dart';
+import '../../../repositories/rentalRepository.dart';
 
 class ListItem extends StatefulWidget {
   final Car car;
   final bool isAvailable;
   final Position? location;
+  final RentalRepository rentals;
+  final CustomerRepository customers;
+  final FlutterSecureStorage storage;
 
-  const ListItem(this.car, this.isAvailable, {Key? key, this.location}) : super(key: key);
+
+  const ListItem(this.car, this.isAvailable, {Key? key, this.location, required this.rentals, required this.customers, required this.storage}) : super(key: key);
 
   @override
   State<ListItem> createState() => _ListItemState();
@@ -52,6 +59,9 @@ class _ListItemState extends State<ListItem> {
               car: widget.car,
               isFavorite: false,
               isAvailable: widget.isAvailable,
+              rentals: widget.rentals,
+              customers: widget.customers,
+              storage: widget.storage,
             ),
           ),
         );
@@ -128,7 +138,7 @@ class _ListItemState extends State<ListItem> {
                       Container(
                         margin: EdgeInsets.only(left: screenWidth * 0.040), // 17 / 926
                         child: Text(
-                          widget.car.name,
+                          '${widget.car.brand} ${widget.car.model}',
                           style: const TextStyle(
                             color: Color(0xFFF1ECEC),
                             fontWeight: FontWeight.w600,
@@ -149,7 +159,7 @@ class _ListItemState extends State<ListItem> {
                             Padding(
                               padding: EdgeInsets.only(left: screenWidth * 0.007), // 7 / 926
                               child: Text(
-                                widget.car.capacity.toString(),
+                                widget.car.nrOfSeats.toString(),
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,

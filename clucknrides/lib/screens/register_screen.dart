@@ -1,13 +1,19 @@
+import 'package:clucknrides/repositories/customerRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../repositories/carRepository.dart';
+import '../repositories/rentalRepository.dart';
 import 'login_screen/main.dart';
 
 class RegisterScreen extends StatelessWidget {
   static const routeName = '/register-screen';
   final FlutterSecureStorage storage;
+  final CustomerRepository customers;
+  final RentalRepository rentals;
+  final CarRepository cars;
 
-  const RegisterScreen({Key? key, required this.storage}) : super(key: key);
+  const RegisterScreen({Key? key, required this.storage, required this.customers, required this.rentals, required this.cars}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -174,14 +180,14 @@ class RegisterScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginScreen(storage: storage,),
-                      ),
-                    );
-                  },
+                  // onTap: () {
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       // builder: (context) => LoginScreen(storage: storage, customers: customers,),
+                  //     ),
+                  //   );
+                  // },
                   child: Container(
                     decoration: const BoxDecoration(
                       color: Color(0xFFFAD4D8),

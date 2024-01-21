@@ -1,17 +1,22 @@
+import 'package:clucknrides/screens/car_screen/rent_widget/main.dart';
 import 'package:clucknrides/services/reverse_geocode.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import '../../models/Car.dart';
+import '../../repositories/customerRepository.dart';
+import '../../repositories/rentalRepository.dart';
 
 class CarScreen extends StatefulWidget {
   final Car car;
   final bool isFavorite;
   final bool isAvailable;
+  final RentalRepository rentals;
+  final CustomerRepository customers;
+  final FlutterSecureStorage storage;
 
-  const CarScreen({Key? key, required this.car, required this.isFavorite, required this.isAvailable}) : super(key: key);
+  const CarScreen({Key? key, required this.car, required this.isFavorite, required this.isAvailable, required this.rentals, required this.customers, required this.storage}) : super(key: key);
 
   @override
   State<CarScreen> createState() => _CarScreenState();
@@ -19,6 +24,11 @@ class CarScreen extends StatefulWidget {
 
 class _CarScreenState extends State<CarScreen> {
   bool favorite = false;
+
+  @override
+  void initState()  {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +41,7 @@ class _CarScreenState extends State<CarScreen> {
         title: Builder(
           builder: (BuildContext context) {
             return Text(
-              "Rent ${widget.car.name}",
+              "Rent ${widget.car.brand} ${widget.car.model}",
               style: const TextStyle(
                 color: Color(0xfffcf7f7),
                 fontFamily: "Inter",
@@ -124,7 +134,7 @@ class _CarScreenState extends State<CarScreen> {
                                       Padding(
                                         padding: EdgeInsets.only(left: screenWidth * 0.246),
                                         child: Text(
-                                          "${widget.car.capacity} persons",
+                                          "${widget.car.nrOfSeats} persons",
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: screenWidth * 0.056,
@@ -195,7 +205,7 @@ class _CarScreenState extends State<CarScreen> {
                                         Padding(
                                           padding: EdgeInsets.only(left: screenWidth * 0.246), // 105 / 428
                                           child: Text(
-                                            "€${widget.car.rate}/KM",
+                                            "€${widget.car.price}/KM",
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: screenWidth * 0.056, // 24 / 428
@@ -281,30 +291,7 @@ class _CarScreenState extends State<CarScreen> {
           SizedBox(height: screenHeight * 0.03),
           Row(
             children: [
-              Padding(
-                padding: EdgeInsets.only(bottom: screenHeight * 0.032, left: screenWidth * 0.035, right: screenWidth * 0.035), // 30 / 926, 15 / 428
-                child: Row(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFAD4D8),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      width: screenWidth * 0.444, // 190 / 428
-                      height: screenHeight * 0.043, // 40 / 926
-                      child: Center(
-                        child: Text(
-                          "Rent now",
-                          style: TextStyle(
-                              fontSize: screenWidth * 0.056, // 24 / 428
-                              fontWeight: FontWeight.w600
-                          ),
-                        ),
-                      ),
-                    ),
-                  ]
-                ),
-              ),
+              RentWidget(car: widget.car, storage: widget.storage, customers: widget.customers, rentals: widget.rentals,),
               Padding(
                 padding: EdgeInsets.only(bottom: screenHeight * 0.032, right: screenWidth * 0.035), // 30 / 926, 15 / 428
                 child: Row(

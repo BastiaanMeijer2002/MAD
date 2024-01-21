@@ -1,3 +1,6 @@
+import 'package:clucknrides/repositories/carRepository.dart';
+import 'package:clucknrides/repositories/customerRepository.dart';
+import 'package:clucknrides/repositories/rentalRepository.dart';
 import 'package:clucknrides/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -7,8 +10,11 @@ import 'login_screen/main.dart';
 class StartScreen extends StatelessWidget {
   static const routeName = '/start-screen';
   final FlutterSecureStorage storage;
+  final CustomerRepository customers;
+  final RentalRepository rentals;
+  final CarRepository cars;
 
-  const StartScreen({Key? key, required this.storage}) : super(key: key);
+  const StartScreen({Key? key, required this.storage, required this.customers, required this.rentals, required this.cars}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +51,7 @@ class StartScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => LoginScreen(storage: storage,),
+                            builder: (context) => LoginScreen(storage: storage, customers: customers, rentals: rentals, cars: cars)
                           ),
                         );
                       },
@@ -79,7 +85,7 @@ class StartScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => RegisterScreen(storage: storage,),
+                            builder: (context) => RegisterScreen(storage: storage, customers: customers, rentals: rentals, cars: cars),
                           ),
                         );
                       },

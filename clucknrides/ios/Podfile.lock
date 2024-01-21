@@ -59,7 +59,7 @@ SPEC CHECKSUMS:
   geolocator_apple: 9157311f654584b9bb72686c55fc02a97b73f461
   location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
   maps_launcher: 2e5b6a2d664ec6c27f82ffa81b74228d770ab203
-  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
+  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
 
