@@ -37,7 +37,7 @@ class RegisterScreen extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(top: 20, left: 20, right: 20),
             child: Text(
-              "Howdy, please enter your details below to register an account.",
+              "howdy, please enter your details below to register an account.",
               style: TextStyle(
                 fontSize: 20, // Adjusted font size
                 fontWeight: FontWeight.w600,
@@ -184,7 +184,7 @@ class RegisterScreen extends StatelessWidget {
                   //   Navigator.push(
                   //     context,
                   //     MaterialPageRoute(
-                  //       // builder: (context) => LoginScreen(storage: storage, customers: customers, rentals: rentals, cars: cars, inspections: inspections,)
+                  //       // builder: (context) => LoginScreen(storage: storage, customers: customers,),
                   //     ),
                   //   );
                   // },
