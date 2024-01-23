@@ -36,3 +36,34 @@ Future<bool> authenticateUser(String username, String password, FlutterSecureSto
     throw HttpException('${response.statusCode}: ${response.body}');
   }
 }
+
+Future<bool> registerUser({
+  required String username,
+  required String firstName,
+  required String lastName,
+  required String email,
+  required String password,
+}) async {
+  final response = await http.post(
+    Uri.parse("${dotenv.env["API_BASE_URL"]}/api/AM/register"),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      "login": username,
+      "firstName": firstName,
+      "lastName": lastName,
+      "email": email,
+      "activated": true,
+      "langKey": "en",
+      "authorities": ["ROLE_USER"],
+      "password": password,
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    throw HttpException('${response.statusCode}: ${response.body}');
+  }
+}
