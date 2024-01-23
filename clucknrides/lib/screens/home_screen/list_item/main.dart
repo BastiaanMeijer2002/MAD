@@ -1,4 +1,5 @@
 import 'package:clucknrides/repositories/customerRepository.dart';
+import 'package:clucknrides/repositories/inspectionRepository.dart';
 import 'package:clucknrides/screens/car_screen/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -13,10 +14,11 @@ class ListItem extends StatefulWidget {
   final Position? location;
   final RentalRepository rentals;
   final CustomerRepository customers;
+  final InspectionRepository inspections;
   final FlutterSecureStorage storage;
 
 
-  const ListItem(this.car, this.isAvailable, {Key? key, this.location, required this.rentals, required this.customers, required this.storage}) : super(key: key);
+  const ListItem(this.car, this.isAvailable, {Key? key, this.location, required this.rentals, required this.customers, required this.storage, required this.inspections}) : super(key: key);
 
   @override
   State<ListItem> createState() => _ListItemState();
@@ -62,6 +64,7 @@ class _ListItemState extends State<ListItem> {
               rentals: widget.rentals,
               customers: widget.customers,
               storage: widget.storage,
+              inspections: widget.inspections,
             ),
           ),
         );

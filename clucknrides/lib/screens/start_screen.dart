@@ -1,5 +1,6 @@
 import 'package:clucknrides/repositories/carRepository.dart';
 import 'package:clucknrides/repositories/customerRepository.dart';
+import 'package:clucknrides/repositories/inspectionRepository.dart';
 import 'package:clucknrides/repositories/rentalRepository.dart';
 import 'package:clucknrides/screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +13,10 @@ class StartScreen extends StatelessWidget {
   final FlutterSecureStorage storage;
   final CustomerRepository customers;
   final RentalRepository rentals;
+  final InspectionRepository inspections;
   final CarRepository cars;
 
-  const StartScreen({Key? key, required this.storage, required this.customers, required this.rentals, required this.cars}) : super(key: key);
+  const StartScreen({Key? key, required this.storage, required this.customers, required this.rentals, required this.cars, required this.inspections}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class StartScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => LoginScreen(storage: storage, customers: customers, rentals: rentals, cars: cars)
+                            builder: (context) => LoginScreen(storage: storage, customers: customers, rentals: rentals, cars: cars, inspections: inspections,)
                           ),
                         );
                       },

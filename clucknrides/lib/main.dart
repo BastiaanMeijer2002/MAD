@@ -1,5 +1,6 @@
 import 'package:clucknrides/repositories/carRepository.dart';
 import 'package:clucknrides/repositories/customerRepository.dart';
+import 'package:clucknrides/repositories/inspectionRepository.dart';
 import 'package:clucknrides/repositories/rentalRepository.dart';
 import 'package:clucknrides/screens/home_screen/main.dart';
 import 'package:clucknrides/screens/start_screen.dart';
@@ -17,8 +18,9 @@ void main() async {
   final CustomerRepository customers = CustomerRepository(database);
   final CarRepository cars = CarRepository(database);
   final RentalRepository rentals = RentalRepository(database, customers, cars);
+  final InspectionRepository inspections = InspectionRepository(database);
   await dotenv.load(fileName: "lib/.env");
-  runApp(MyApp(database: database, customerRepository: customers, rentalRepository: rentals, carRepository: cars,));
+  runApp(MyApp(database: database, customerRepository: customers, rentalRepository: rentals, carRepository: cars, inspectionRepository: inspections,));
 }
 
 class MyApp extends StatelessWidget {
@@ -26,9 +28,10 @@ class MyApp extends StatelessWidget {
   final CustomerRepository customerRepository;
   final RentalRepository rentalRepository;
   final CarRepository carRepository;
+  final InspectionRepository inspectionRepository;
 
 
-  const MyApp({super.key, required this.database, required this.customerRepository, required this.rentalRepository, required this.carRepository});
+  const MyApp({super.key, required this.database, required this.customerRepository, required this.rentalRepository, required this.carRepository, required this.inspectionRepository});
   static const storage = FlutterSecureStorage();
 
 
@@ -41,7 +44,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFD6FFB7),
         useMaterial3: true,
       ),
-      home: StartScreen(storage: storage, customers: customerRepository, rentals: rentalRepository, cars: carRepository),
+      home: StartScreen(storage: storage, customers: customerRepository, rentals: rentalRepository, cars: carRepository, inspections: inspectionRepository,),
     );
   }
 }

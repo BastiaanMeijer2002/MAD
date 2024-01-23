@@ -1,3 +1,4 @@
+import 'package:clucknrides/repositories/inspectionRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart';
@@ -37,6 +38,7 @@ class HomeScreen extends StatefulWidget {
   final FlutterSecureStorage storage;
   final RentalRepository rentals;
   final CustomerRepository customers;
+  final InspectionRepository inspections;
   final CarRepository cars;
 
   const HomeScreen({
@@ -45,6 +47,7 @@ class HomeScreen extends StatefulWidget {
     required this.rentals,
     required this.customers,
     required this.cars,
+    required this.inspections,
   }) : super(key: key);
 
   @override
@@ -204,6 +207,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                 rentals: widget.rentals,
                                 customers: widget.customers,
                                 storage: widget.storage,
+                                inspections: widget.inspections,
                               );
                             }
                             return const Text("test");
