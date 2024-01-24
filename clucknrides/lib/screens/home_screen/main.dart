@@ -175,11 +175,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         actions: [
           IconButton(
             onPressed: (){
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => ProfileWidget(storage: widget.storage,),
-                ),
-              );
+              Navigator.of(context).pushNamed('profile');
             },
             icon: const Icon(
               Icons.person_outline,

@@ -10,10 +10,8 @@ class RegisterScreen extends StatelessWidget {
   static const routeName = '/register-screen';
   final FlutterSecureStorage storage;
   final CustomerRepository customers;
-  final RentalRepository rentals;
-  final CarRepository cars;
 
-  const RegisterScreen({Key? key, required this.storage, required this.customers, required this.rentals, required this.cars}) : super(key: key);
+  const RegisterScreen({Key? key, required this.storage, required this.customers}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -180,14 +178,9 @@ class RegisterScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  // onTap: () {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       // builder: (context) => LoginScreen(storage: storage, customers: customers,),
-                  //     ),
-                  //   );
-                  // },
+                  onTap: () {
+                    Navigator.of(context).pushReplacementNamed('login');
+                  },
                   child: Container(
                     decoration: const BoxDecoration(
                       color: Color(0xFFFAD4D8),

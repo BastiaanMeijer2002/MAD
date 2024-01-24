@@ -9,14 +9,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'login_screen/main.dart';
 
 class StartScreen extends StatelessWidget {
-  static const routeName = '/start-screen';
-  final FlutterSecureStorage storage;
-  final CustomerRepository customers;
-  final RentalRepository rentals;
-  final InspectionRepository inspections;
-  final CarRepository cars;
 
-  const StartScreen({Key? key, required this.storage, required this.customers, required this.rentals, required this.cars, required this.inspections}) : super(key: key);
+  const StartScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +44,7 @@ class StartScreen extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(storage: storage, customers: customers, rentals: rentals, cars: cars, inspections: inspections,)
-                          ),
-                        );
+                        Navigator.of(context).pushReplacementNamed('login');
                       },
                       child: Container(
                         decoration: const BoxDecoration(
@@ -84,12 +73,7 @@ class StartScreen extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegisterScreen(storage: storage, customers: customers, rentals: rentals, cars: cars),
-                          ),
-                        );
+                        Navigator.of(context).pushReplacementNamed('register');
                       },
                       child: Container(
                         decoration: const BoxDecoration(

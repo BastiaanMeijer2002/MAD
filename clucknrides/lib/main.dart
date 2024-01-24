@@ -3,6 +3,9 @@ import 'package:clucknrides/repositories/customerRepository.dart';
 import 'package:clucknrides/repositories/inspectionRepository.dart';
 import 'package:clucknrides/repositories/rentalRepository.dart';
 import 'package:clucknrides/screens/home_screen/main.dart';
+import 'package:clucknrides/screens/login_screen/main.dart';
+import 'package:clucknrides/screens/profile_screen/main.dart';
+import 'package:clucknrides/screens/register_screen.dart';
 import 'package:clucknrides/screens/start_screen.dart';
 import 'package:clucknrides/utils/database.dart';
 import 'package:clucknrides/widgets/loading_widget/main.dart';
@@ -44,32 +47,32 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFD6FFB7),
         useMaterial3: true,
       ),
-      home: FutureBuilder<String?>(
-        future: storage.read(key: 'jwt'),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData && snapshot.data != null) {
-              return HomeScreen(
-                storage: storage,
-                rentals: rentalRepository,
-                customers: customerRepository,
-                cars: carRepository,
-                inspections: inspectionRepository
-              );
-            } else {
-              return StartScreen(
-                storage: storage,
-                customers: customerRepository,
-                rentals: rentalRepository,
-                cars: carRepository,
-                inspections: inspectionRepository,
-              );
-            }
-          } else {
-            return const LoadingWidget(message: 'Welcome back',);
-          }
+      home: Builder(
+        builder: (BuildContext context) {
+          return FutureBuilder<String?>(
+            future: storage.read(key: 'jwt'),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData && snapshot.data != null) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.of(context).pushReplacementNamed('home');
+                  });
+                }
+                return const StartScreen();
+              } else {
+                return const LoadingWidget(message: 'Welcome back');
+              }
+            },
+          );
         },
-      ),    );
+      ),
+      routes: {
+        'home': (context) => HomeScreen(storage: storage, rentals: rentalRepository, customers: customerRepository, cars: carRepository, inspections: inspectionRepository),
+        'login': (context) => LoginScreen(storage: storage, customers: customerRepository),
+        'register': (context) => RegisterScreen(storage: storage, customers: customerRepository),
+        'profile': (context) => const ProfileWidget(storage: storage),
+      },
+    );
   }
 }
 

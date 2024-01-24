@@ -17,12 +17,9 @@ import '../home_screen/main.dart';
 class LoginScreen extends StatefulWidget {
   final FlutterSecureStorage storage;
   final CustomerRepository customers;
-  final RentalRepository rentals;
-  final InspectionRepository inspections;
-  final CarRepository cars;
 
 
-  const LoginScreen({Key? key, required this.storage, required this.customers, required this.rentals, required this.cars, required this.inspections}) : super(key: key);
+  const LoginScreen({Key? key, required this.storage, required this.customers}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -156,11 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               return const LoadingWidget(message: "Howdy, welcome back!");
                             } else if (snapshot.hasData && snapshot.data!) {
                               Future.delayed(Duration.zero, () {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) => HomeScreen(storage: widget.storage, customers: widget.customers, rentals: widget.rentals, cars: widget.cars, inspections: widget.inspections,),
-                                  ),
-                                );
+                                Navigator.of(context).pushReplacementNamed('home');
                               });
                               return const SizedBox.shrink();
                             } else if (snapshot.hasError && snapshot.error is HttpException) {
