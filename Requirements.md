@@ -4,23 +4,23 @@
 
 - ALS klant WIL IK kunnen in/uitloggen ZODAT ik veilig gebruik kan maken van de app
 - ALS klant WIL IK mijn wachtwoord kunnen herstellen ZODAT ik, wanneer ik mijn wachtwoord vergeten ben toch weer gebruik kan maken van de app
-- ALS klant WIL IK een overzicht van alle auto's ZODAT ik weet welke auto's beschikbaar zijn
-- ALS klant WIL IK het overzicht van beschikbare auto's kunnen filteren/sorteren op basis van kenmerken van de auto ZODAT ik een exacte keuze kan maken en precies weet welke auto ik ga reserveren/huren
-- ALS klant WIL IK informatie in de app in kunnen zien wanneer er geen netwerkverbinding is ZODAT ik altijd en overal inzage heb
+- (complete)ALS klant WIL IK een overzicht van alle auto's ZODAT ik weet welke auto's beschikbaar zijn
+- (complete)ALS klant WIL IK het overzicht van beschikbare auto's kunnen filteren/sorteren op basis van kenmerken van de auto ZODAT ik een exacte keuze kan maken en precies weet welke auto ik ga reserveren/huren
+- (complete)ALS klant WIL IK informatie in de app in kunnen zien wanneer er geen netwerkverbinding is ZODAT ik altijd en overal inzage heb
 - ALS klant WIL IK een overzicht hebben van reserveringen/huren uit het verleden ZODAT ik altijd overzicht heb
-- ALS klant WIL IK schade kunnen melden middels een formulier en foto ZODAT ik zo snel en laagdrempelig mogelijk schade kan laten afhandelen
+- (complete)ALS klant WIL IK schade kunnen melden middels een formulier en foto ZODAT ik zo snel en laagdrempelig mogelijk schade kan laten afhandelen
 - ALS klant WIL IK notificaties ontvangen ZODAT ik van belangrijke momenten proactief op de hoogte gebracht wordt
 
 ### Could/Would/Should Haves
 
-- ALS klant WIL IK van de alle reserveringen en verhuren de status in kunnen zien ZODAT ik kan zien of er nog openstaande betalingen zijn
+- (Bastiaan)ALS klant WIL IK van de alle reserveringen en verhuren de status in kunnen zien ZODAT ik kan zien of er nog openstaande betalingen zijn
 - ALS klant WIL IK een support ticket kunnen indienen ZODAT ik zo laagdrempelig mogelijk issues kan melden
-- ALS klant WIL IK reserveringen kunnen maken/wijzigen/verwijderen ZODAT ik mijn reserveringen zelf kan beheren
+- (Bastiaan)ALS klant WIL IK reserveringen kunnen maken/wijzigen/verwijderen ZODAT ik mijn reserveringen zelf kan beheren
 - ALS klant WIL IK een lijst met veelduldig gestelde vragen inzien ZODAT ik niet voor elke kleine vraag moet bellen of mailen
-- ALS klant WIL IK dat een reservering automatisch omgezet wordt in een een verhuur ZODAT ik zonder extra handeling de auto daadwerkelijk kan huren
+- (Bestiaan)ALS klant WIL IK dat een reservering automatisch omgezet wordt in een een verhuur ZODAT ik zonder extra handeling de auto daadwerkelijk kan huren
 - ALS klant WIL IK bij aanvang en aan het einde van een verhuring de km stand op kunnen voeren ZODAT ik de gereden kilometers kan rapporteren en controleren
 - ALS klant WIL IK de huidige locatie van een auto terug kunnen sturen ZODAT ik kan laten weten waar de auto staat (bijv. aan het einde van de huurtermijn)
-- ALS klant WIL IK me kunnen registreren ZODAT ik toegang krijg tot de functies van de app
+- (complete)ALS klant WIL IK me kunnen registreren ZODAT ik toegang krijg tot de functies van de app
 - ALS klant WIL IK een thema kunnen kiezen ZODAT de UI van de app aansluit bij het onderliggende OS en/of andere apps
 - ALS klant WIL IK auto's als favoriet kunnen markeren ZODAT ik altijd kan zien of mijn favoriete auto beschikbaar is
 - ALS klant WIL IK 2FA aan kunnen zetten ZODAT het gebruik van de app maximaal wordt beveiligd
