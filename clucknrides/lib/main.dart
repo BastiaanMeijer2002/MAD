@@ -44,8 +44,32 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFD6FFB7),
         useMaterial3: true,
       ),
-      home: StartScreen(storage: storage, customers: customerRepository, rentals: rentalRepository, cars: carRepository, inspections: inspectionRepository,),
-    );
+      home: FutureBuilder<String?>(
+        future: storage.read(key: 'jwt'),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData && snapshot.data != null) {
+              return HomeScreen(
+                storage: storage,
+                rentals: rentalRepository,
+                customers: customerRepository,
+                cars: carRepository,
+                inspections: inspectionRepository
+              );
+            } else {
+              return StartScreen(
+                storage: storage,
+                customers: customerRepository,
+                rentals: rentalRepository,
+                cars: carRepository,
+                inspections: inspectionRepository,
+              );
+            }
+          } else {
+            return const LoadingWidget(message: 'Welcome back',);
+          }
+        },
+      ),    );
   }
 }
 

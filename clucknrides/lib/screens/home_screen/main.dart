@@ -1,4 +1,5 @@
 import 'package:clucknrides/repositories/inspectionRepository.dart';
+import 'package:clucknrides/screens/profile_screen/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart';
@@ -171,6 +172,22 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
             fontWeight: FontWeight.w600,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: (){
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => ProfileWidget(storage: widget.storage,),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.person_outline,
+              color: Colors.white,
+              size: 36,
+            ),
+          )
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: _onRefresh,
