@@ -1,4 +1,5 @@
 import 'package:clucknrides/repositories/inspectionRepository.dart';
+import 'package:clucknrides/screens/car_screen/book_widget/main.dart';
 import 'package:clucknrides/screens/car_screen/rent_widget/main.dart';
 import 'package:clucknrides/services/reverse_geocode.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class CarScreen extends StatefulWidget {
 
 class _CarScreenState extends State<CarScreen> {
   bool favorite = false;
+  bool _isActive = false;
 
   @override
   void initState()  {
@@ -293,31 +295,11 @@ class _CarScreenState extends State<CarScreen> {
           SizedBox(height: screenHeight * 0.03),
           Row(
             children: [
-              RentWidget(car: widget.car, storage: widget.storage, customers: widget.customers, rentals: widget.rentals, available: widget.isAvailable, inspections: widget.inspections,),
-              Padding(
-                padding: EdgeInsets.only(bottom: screenHeight * 0.032, right: screenWidth * 0.035), // 30 / 926, 15 / 428
-                child: Row(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF9BBFB9),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      width: screenWidth * 0.444, // 190 / 428
-                      height: screenHeight * 0.043, // 40 / 926
-                      child: Center(
-                        child: Text(
-                          "Book for later",
-                          style: TextStyle(
-                              fontSize: screenWidth * 0.056, // 24 / 428
-                              fontWeight: FontWeight.w400
-                          ),
-                        ),
-                      ),
-                    ),
-                  ]
-                ),
-              ),
+              RentWidget(car: widget.car, storage: widget.storage, customers: widget.customers, rentals: widget.rentals, available: widget.isAvailable, inspections: widget.inspections, isActive: (bool active) {setState(() {
+                _isActive = active;
+              });},),
+              if (widget.isAvailable)
+              BookWidget(car: widget.car, rentals: widget.rentals, storage: widget.storage, customers: widget.customers,),
             ],
           )
         ],

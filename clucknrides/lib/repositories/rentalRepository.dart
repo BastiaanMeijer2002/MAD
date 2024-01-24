@@ -1,4 +1,5 @@
 import 'package:clucknrides/models/Rental.dart';
+import 'package:clucknrides/services/fetch_rentals.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/Car.dart';
@@ -67,8 +68,6 @@ class RentalRepository {
     final Car car = await cars.car(rentalData['carId']);
     final Customer customer = await customers.customer(rentalData['customerId']);
 
-    print(customer.firstName.toString());
-
     return Rental.fromJsonWithRelated(rentalData, car: car, customer: customer);
   }
 
@@ -86,16 +85,51 @@ class RentalRepository {
   Future<Rental> activeRental(Car car) async {
     final List<Map<String, dynamic>> rentalsData = await database.query(
       "rentals",
-      where: "carId = ? AND state = ?",
-      whereArgs: [car.id, "ACTIVE"],
+      where: "carId = ?",
+      whereArgs: [car.id],
+      orderBy: "id DESC"
     );
 
     final List<Rental> rentals = [];
     for (final rentalData in rentalsData) {
       final Rental rental = await _mapToRental(rentalData);
-      rentals.add(rental);
+      if (rental.state != "RESERVED") rentals.add(rental);
     }
 
     return rentals.first;
+  }
+
+  Future<Rental?> activeBooking(Car car, Customer customer) async {
+    final List<Map<String, dynamic>> rentalsData = await database.query(
+        "rentals",
+        where: "carId = ? AND customerId = ? AND state = ?",
+        whereArgs: [car.id, customer.id, "RESERVED"],
+        orderBy: "id DESC"
+    );
+
+    final List<Rental> rentals = [];
+    for (final rentalData in rentalsData) {
+      final Rental rental = await _mapToRental(rentalData);
+      if (DateTime.parse(rental.fromDate).compareTo(DateTime.now()) > 0) rentals.add(rental);
+    }
+    if (rentals.isNotEmpty) return rentals.first;
+
+    return null;
+  }
+
+
+  Future<List<DateTime>> unavailableDays(Car car) async {
+    List<DateTime> days = [];
+    final List<Map<String, dynamic>> rentalsData = await database.query('rentals', where: "carId = ? and state = ?", whereArgs: [car.id, "RESERVED"]);
+    for (Map<String, dynamic> rental in rentalsData) {
+      if (rental['state'] == "RESERVED") {
+        DateTime fromDate = DateTime.parse(rental['fromDate']);
+        DateTime toDate = DateTime.parse(rental['toDate']);
+        for (DateTime date = fromDate; date.isBefore(toDate) || date.isAtSameMomentAs(fromDate) || date.isAtSameMomentAs(toDate); date = date.add(const Duration(days: 1))) {
+          days.add(date);
+        }
+      }
+    }
+    return days;
   }
 }

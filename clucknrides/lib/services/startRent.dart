@@ -30,6 +30,8 @@ Future<void> startRent(FlutterSecureStorage storage, Car car, CustomerRepository
     }),
   );
 
+  print(response.request.toString());
+
   if (response.statusCode == 201) {
     Map<String, dynamic> responseData = jsonDecode(response.body);
     Rental rental = Rental.fromJson(responseData);

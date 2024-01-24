@@ -329,7 +329,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
       setState(() {
         _currentPosition = position;
-        print("long: ${_currentPosition?.longitude} lat: ${_currentPosition?.latitude}");
       });
 
       Geolocator.getPositionStream().listen((Position position) {

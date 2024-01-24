@@ -29,7 +29,7 @@ class Customer {
       'number': nr,
       'lastName': lastName,
       'firstName': firstName,
-      'from': from
+      'from': from,
     };
   }
 }

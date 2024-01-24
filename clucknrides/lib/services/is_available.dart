@@ -8,11 +8,12 @@ Future<bool> isAvailable(FlutterSecureStorage storage,RentalRepository rentals, 
   List<Rental> rentalList = await rentals.carRentals(car);
 
   for (Rental rental in rentalList) {
-    print('rental ${rental.car.id} car ${car.id}');
-    if (rental.car.id == car.id && rental.state != "RETURNED"){
-      return false;
+    switch (rental.state) {
+      case "ACTIVE":
+        return false;
+      case "RESERVED":
+        if (DateTime.parse(rental.fromDate).compareTo(DateTime.now()) < 0 && DateTime.parse(rental.toDate).compareTo(DateTime.now()) > 0) return false;
     }
   }
-
   return true;
 }

@@ -22,8 +22,9 @@ class RentWidget extends StatefulWidget {
   final RentalRepository rentals;
   final InspectionRepository inspections;
   final bool available;
+  final void Function(bool active) isActive;
 
-  const RentWidget({Key? key, required this.car, required this.customers, required this.storage, required this.rentals, required this.available, required this.inspections}) : super(key: key);
+  const RentWidget({Key? key, required this.car, required this.customers, required this.storage, required this.rentals, required this.available, required this.inspections, required this.isActive}) : super(key: key);
 
   @override
   State<RentWidget> createState() => _RentWidgetState();
@@ -37,6 +38,7 @@ class _RentWidgetState extends State<RentWidget> {
   String file = '';
   String imgState = "No image selected";
   String damageDescription = '';
+
   @override
   void initState() {
     super.initState();
@@ -47,20 +49,31 @@ class _RentWidgetState extends State<RentWidget> {
     Customer currentCustomer = await fetchCustomer(widget.storage, widget.customers);
     isActive = await widget.rentals.isActiveRent(widget.car, currentCustomer);
     activeRental = await widget.rentals.activeRental(widget.car);
-    if (isActive) {
-      activeRent(context);
-      active = true;
+
+    if (context.mounted) {
+      if (isActive) {
+        activeRent(context);
+        active = true;
+      }
     }
+
   }
 
   Future<void> getModal() async {
+    await fetchRentals(widget.storage, widget.rentals);
     Customer currentCustomer = await fetchCustomer(widget.storage, widget.customers);
     isActive = await widget.rentals.isActiveRent(widget.car, currentCustomer);
-    if (isActive) {
-      activeRent(context);
-    } else {
-      newRent(context);
+
+    if (context.mounted) {
+      if (isActive) {
+        activeRent(context);
+      } else {
+        List<DateTime> dates = await widget.rentals.unavailableDays(widget.car);
+        if (context.mounted) dates.isNotEmpty ? newRent(context, dates.last) : newRent(context, null);
+
+      }
     }
+
   }
 
   Future<void> _uploadPhoto() async {
@@ -155,7 +168,7 @@ class _RentWidgetState extends State<RentWidget> {
     );
   }
 
-  void newRent(BuildContext context) {
+  void newRent(BuildContext context, DateTime? until) {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -168,9 +181,9 @@ class _RentWidgetState extends State<RentWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const Column(
+              Column(
                 children: [
-                  Align(
+                  const Align(
                     alignment: Alignment.topLeft,
                     child: Padding(
                       padding: EdgeInsets.all(16.0),
@@ -184,6 +197,22 @@ class _RentWidgetState extends State<RentWidget> {
                       ),
                     ),
                   ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        until != null ? "This car is available until ${until.day}/${until.month}" : '',
+                        style: const TextStyle(
+                          fontFamily: "inter",
+                          fontWeight: FontWeight.w400,
+                          fontSize: 20,
+                        ),
+                        maxLines: 3,
+                      ),
+                    ),
+                  )
+
                 ],
               ),
               Expanded(
@@ -224,7 +253,7 @@ class _RentWidgetState extends State<RentWidget> {
                             ),
                             onPressed: () async {
                               await startRent(widget.storage, widget.car, widget.customers, widget.rentals);
-                              Navigator.pop(context);
+                              if (context.mounted) Navigator.pop(context);
                               getActive();
                               setState(() {
                                 active = true;
@@ -474,8 +503,8 @@ class _RentWidgetState extends State<RentWidget> {
                               file,
                               damageDescription,
                             );
-                            Navigator.pop(context);
-                            Navigator.pop(context);
+                            if (context.mounted) Navigator.pop(context);
+                            if (context.mounted) Navigator.pop(context);
                           },
                           child: const Text(
                             'Stop renting',
