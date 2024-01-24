@@ -44,7 +44,7 @@ class StartScreen extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushReplacementNamed('login');
+                        Navigator.of(context).pushNamed('login');
                       },
                       child: Container(
                         decoration: const BoxDecoration(
@@ -73,7 +73,7 @@ class StartScreen extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushReplacementNamed('register');
+                        Navigator.of(context).pushNamed('register');
                       },
                       child: Container(
                         decoration: const BoxDecoration(

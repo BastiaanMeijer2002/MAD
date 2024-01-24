@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
         'home': (context) => HomeScreen(storage: storage, rentals: rentalRepository, customers: customerRepository, cars: carRepository, inspections: inspectionRepository),
         'login': (context) => LoginScreen(storage: storage, customers: customerRepository),
         'register': (context) => RegisterScreen(storage: storage, customers: customerRepository),
-        'profile': (context) => const ProfileWidget(storage: storage),
+        'profile': (context) => ProfileWidget(storage: storage, rentals: rentalRepository, customers: customerRepository,),
         'start': (context) => const StartScreen(),
       },
     );

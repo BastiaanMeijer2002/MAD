@@ -132,4 +132,46 @@ class RentalRepository {
     }
     return days;
   }
+
+  Future<List<Rental>> activeRentals(Customer customer) async {
+    List<Rental> rentals = [];
+    final List<Map<String, dynamic>> rentalsData = await database.query('rentals', where: "customerId = ? AND state = ?", whereArgs: [customer.id, "ACTIVE"]);
+    if (rentalsData.isNotEmpty) {
+      for (Map<String,dynamic> rental in rentalsData) {
+        Car car = await cars.car(rental["carId"]);
+        rentals.add(Rental.fromJsonWithRelated(rental, car: car, customer: customer));
+      }
+    }
+
+    return rentals;
+  }
+
+  Future<List<Rental>> upcomingRentals(Customer customer) async {
+    print('user: ${customer.id}');
+    List<Rental> rentals = [];
+    final List<Map<String, dynamic>> rentalsData = await database.query('rentals', where: "customerId = ? AND state = ?", whereArgs: [customer.id, "RESERVED"]);
+    if (rentalsData.isNotEmpty) {
+      for (Map<String,dynamic> rental in rentalsData) {
+        Car car = await cars.car(rental["carId"]);
+        rentals.add(Rental.fromJsonWithRelated(rental, car: car, customer: customer));
+      }
+    }
+
+    return rentals;
+  }
+
+  Future<List<Rental>> finishedRentals(Customer customer) async {
+    List<Rental> rentals = [];
+    final List<Map<String, dynamic>> rentalsData = await database.query('rentals', where: "customerId = ? AND state = ?", whereArgs: [customer.id, "RETURNED"]);
+    if (rentalsData.isNotEmpty) {
+      for (Map<String,dynamic> rental in rentalsData) {
+        Car car = await cars.car(rental["carId"]);
+        rentals.add(Rental.fromJsonWithRelated(rental, car: car, customer: customer));
+      }
+    }
+
+    return rentals;
+  }
+
+
 }
