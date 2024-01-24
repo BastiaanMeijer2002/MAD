@@ -2,7 +2,7 @@
 
 ### Must Haves
 
-- ALS klant WIL IK kunnen in/uitloggen ZODAT ik veilig gebruik kan maken van de app
+- (completed)ALS klant WIL IK kunnen in/uitloggen ZODAT ik veilig gebruik kan maken van de app
 - ALS klant WIL IK mijn wachtwoord kunnen herstellen ZODAT ik, wanneer ik mijn wachtwoord vergeten ben toch weer gebruik kan maken van de app
 - (complete)ALS klant WIL IK een overzicht van alle auto's ZODAT ik weet welke auto's beschikbaar zijn
 - (complete)ALS klant WIL IK het overzicht van beschikbare auto's kunnen filteren/sorteren op basis van kenmerken van de auto ZODAT ik een exacte keuze kan maken en precies weet welke auto ik ga reserveren/huren

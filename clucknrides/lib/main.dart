@@ -71,6 +71,7 @@ class MyApp extends StatelessWidget {
         'login': (context) => LoginScreen(storage: storage, customers: customerRepository),
         'register': (context) => RegisterScreen(storage: storage, customers: customerRepository),
         'profile': (context) => const ProfileWidget(storage: storage),
+        'start': (context) => const StartScreen(),
       },
     );
   }

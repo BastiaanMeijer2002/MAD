@@ -43,12 +43,9 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                   fixedSize: MaterialStatePropertyAll(Size(screenWidth * 0.84, screenHeight * 0.05)),
                   backgroundColor: const MaterialStatePropertyAll(Colors.red),
                 ),
-                onPressed: (){
-                  // Navigator.of(context).pushReplacement(
-                  //   MaterialPageRoute(
-                  //     builder: (context) =>
-                  //   ),
-                  // )
+                onPressed: () async{
+                  await widget.storage.delete(key: "jwt");
+                  if (context.mounted) Navigator.of(context).pushReplacementNamed('start');
                 },
                 child: const Text(
                   "Sign out",
