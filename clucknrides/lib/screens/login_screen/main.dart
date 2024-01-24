@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:clucknrides/repositories/carRepository.dart';
 import 'package:clucknrides/repositories/customerRepository.dart';
+import 'package:clucknrides/repositories/inspectionRepository.dart';
 import 'package:clucknrides/screens/password_reset_screen.dart';
 import 'package:clucknrides/services/authenticationService.dart';
 import 'package:clucknrides/widgets/errors/invalid_credentials_error.dart';
@@ -17,10 +18,11 @@ class LoginScreen extends StatefulWidget {
   final FlutterSecureStorage storage;
   final CustomerRepository customers;
   final RentalRepository rentals;
+  final InspectionRepository inspections;
   final CarRepository cars;
 
 
-  const LoginScreen({Key? key, required this.storage, required this.customers, required this.rentals, required this.cars}) : super(key: key);
+  const LoginScreen({Key? key, required this.storage, required this.customers, required this.rentals, required this.cars, required this.inspections}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -156,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Future.delayed(Duration.zero, () {
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
-                                    builder: (context) => HomeScreen(storage: widget.storage, customers: widget.customers, rentals: widget.rentals, cars: widget.cars),
+                                    builder: (context) => HomeScreen(storage: widget.storage, customers: widget.customers, rentals: widget.rentals, cars: widget.cars, inspections: widget.inspections,),
                                   ),
                                 );
                               });

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:clucknrides/models/Inspection.dart';
 import 'package:clucknrides/repositories/customerRepository.dart';
+import 'package:clucknrides/repositories/inspectionRepository.dart';
 import 'package:clucknrides/repositories/rentalRepository.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -12,10 +14,12 @@ import '../models/Customer.dart';
 import '../models/Rental.dart';
 import 'fetch_customer.dart';
 
-Future<void> stopRent(FlutterSecureStorage storage, Car car, CustomerRepository customers, RentalRepository rentals) async {
+Future<void> stopRent(FlutterSecureStorage storage, Car car, CustomerRepository customers, RentalRepository rentals, InspectionRepository inspections, String file, String desc) async {
   Rental rental = await rentals.activeRental(car);
 
   final jwt = await storage.read(key: "jwt");
+  await createInspection(storage, file, desc, rental);
+
   final response = await http.patch(
     Uri.parse('${dotenv.env["API_BASE_URL"]}/api/rentals/${rental.id}'),
     headers: {
@@ -37,4 +41,34 @@ Future<void> stopRent(FlutterSecureStorage storage, Car car, CustomerRepository 
   } else {
     throw HttpException('${response.statusCode}: ${response.body}');
   }
+}
+
+Future<Inspection?> createInspection(FlutterSecureStorage storage, String file, String desc, Rental rental) async{
+  final jwt = await storage.read(key: "jwt");
+
+  if (file.isNotEmpty && desc.isNotEmpty) {
+    final inspectionResponse = await http.post(
+        Uri.parse('${dotenv.env["API_BASE_URL"]}/api/inspections'),
+        headers: {
+          HttpHeaders.authorizationHeader: 'Bearer $jwt',
+          HttpHeaders.contentTypeHeader: 'application/json'
+        },
+        body: jsonEncode({
+          'result': desc,
+          'photo': file,
+          'rental': rental.toJson(),
+        })
+    );
+
+    if (inspectionResponse.statusCode == 201) {
+      Map<String, dynamic> responseData = jsonDecode(inspectionResponse.body);
+      print(responseData.toString());
+      return Inspection.fromJson(responseData);
+    }
+
+    throw const HttpException("Creating inspection failed");
+
+  }
+
+  return null;
 }

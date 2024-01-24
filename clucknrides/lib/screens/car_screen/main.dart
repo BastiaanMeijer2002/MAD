@@ -1,3 +1,4 @@
+import 'package:clucknrides/repositories/inspectionRepository.dart';
 import 'package:clucknrides/screens/car_screen/rent_widget/main.dart';
 import 'package:clucknrides/services/reverse_geocode.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +15,10 @@ class CarScreen extends StatefulWidget {
   final bool isAvailable;
   final RentalRepository rentals;
   final CustomerRepository customers;
+  final InspectionRepository inspections;
   final FlutterSecureStorage storage;
 
-  const CarScreen({Key? key, required this.car, required this.isFavorite, required this.isAvailable, required this.rentals, required this.customers, required this.storage}) : super(key: key);
+  const CarScreen({Key? key, required this.car, required this.isFavorite, required this.isAvailable, required this.rentals, required this.customers, required this.storage, required this.inspections}) : super(key: key);
 
   @override
   State<CarScreen> createState() => _CarScreenState();
@@ -291,7 +293,7 @@ class _CarScreenState extends State<CarScreen> {
           SizedBox(height: screenHeight * 0.03),
           Row(
             children: [
-              RentWidget(car: widget.car, storage: widget.storage, customers: widget.customers, rentals: widget.rentals, available: widget.isAvailable,),
+              RentWidget(car: widget.car, storage: widget.storage, customers: widget.customers, rentals: widget.rentals, available: widget.isAvailable, inspections: widget.inspections,),
               Padding(
                 padding: EdgeInsets.only(bottom: screenHeight * 0.032, right: screenWidth * 0.035), // 30 / 926, 15 / 428
                 child: Row(
