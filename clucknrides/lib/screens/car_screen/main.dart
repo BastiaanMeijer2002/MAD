@@ -1,5 +1,6 @@
 import 'package:clucknrides/repositories/inspectionRepository.dart';
 import 'package:clucknrides/screens/car_screen/book_widget/main.dart';
+import 'package:clucknrides/screens/car_screen/car_screen_arguments.dart';
 import 'package:clucknrides/screens/car_screen/rent_widget/main.dart';
 import 'package:clucknrides/services/reverse_geocode.dart';
 import 'package:flutter/material.dart';
@@ -11,15 +12,12 @@ import '../../repositories/customerRepository.dart';
 import '../../repositories/rentalRepository.dart';
 
 class CarScreen extends StatefulWidget {
-  final Car car;
-  final bool isFavorite;
-  final bool isAvailable;
   final RentalRepository rentals;
   final CustomerRepository customers;
   final InspectionRepository inspections;
   final FlutterSecureStorage storage;
 
-  const CarScreen({Key? key, required this.car, required this.isFavorite, required this.isAvailable, required this.rentals, required this.customers, required this.storage, required this.inspections}) : super(key: key);
+  const CarScreen({Key? key, required this.rentals, required this.customers, required this.storage, required this.inspections}) : super(key: key);
 
   @override
   State<CarScreen> createState() => _CarScreenState();
@@ -38,6 +36,8 @@ class _CarScreenState extends State<CarScreen> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    
+    final args = ModalRoute.of(context)!.settings.arguments as CarScreenArguments;
 
     return Scaffold(
       appBar: AppBar(
@@ -45,7 +45,7 @@ class _CarScreenState extends State<CarScreen> {
         title: Builder(
           builder: (BuildContext context) {
             return Text(
-              "Rent ${widget.car.brand} ${widget.car.model}",
+              "Rent ${args.car.brand} ${args.car.model}",
               style: const TextStyle(
                 color: Color(0xfffcf7f7),
                 fontFamily: "Inter",
@@ -61,8 +61,8 @@ class _CarScreenState extends State<CarScreen> {
           Container(
             width: double.infinity,
             height: screenHeight * 0.307, // 286 / 926
-            color: widget.isAvailable ? const Color(0xFFFAD4D8) : const Color(0xFF9BBFB9),
-            child: Center(child: Image.asset('assets/images/${widget.car.img}')),
+            color: args.isAvailable ? const Color(0xFFFAD4D8) : const Color(0xFF9BBFB9),
+            child: Center(child: Image.asset('assets/images/${args.car.img}')),
           ),
           Container(
             width: double.infinity,
@@ -79,7 +79,7 @@ class _CarScreenState extends State<CarScreen> {
               child: Row(
                 children: [
                   Text(
-                    widget.isAvailable ? "Currently available" : "Currently not available",
+                    args.isAvailable ? "Currently available" : "Currently not available",
                     style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -138,7 +138,7 @@ class _CarScreenState extends State<CarScreen> {
                                       Padding(
                                         padding: EdgeInsets.only(left: screenWidth * 0.246),
                                         child: Text(
-                                          "${widget.car.nrOfSeats} persons",
+                                          "${args.car.nrOfSeats} persons",
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: screenWidth * 0.056,
@@ -161,7 +161,7 @@ class _CarScreenState extends State<CarScreen> {
                                         Padding(
                                           padding: EdgeInsets.only(left: screenWidth * 0.246),
                                           child: Text(
-                                            widget.car.fuel.toLowerCase(),
+                                            args.car.fuel.toLowerCase(),
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: screenWidth * 0.056,
@@ -185,7 +185,7 @@ class _CarScreenState extends State<CarScreen> {
                                         Padding(
                                           padding: EdgeInsets.only(left: screenWidth * 0.246),
                                           child: Text(
-                                            "${widget.car.modelYear}",
+                                            "${args.car.modelYear}",
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: screenWidth * 0.056,
@@ -209,7 +209,7 @@ class _CarScreenState extends State<CarScreen> {
                                         Padding(
                                           padding: EdgeInsets.only(left: screenWidth * 0.246), // 105 / 428
                                           child: Text(
-                                            "€${widget.car.price}/KM",
+                                            "€${args.car.price}/KM",
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: screenWidth * 0.056, // 24 / 428
@@ -222,7 +222,7 @@ class _CarScreenState extends State<CarScreen> {
                                     ),
                                   ),
                                   GestureDetector(
-                                    onTap: () {MapsLauncher.launchCoordinates(widget.car.latitude, widget.car.longitude);},
+                                    onTap: () {MapsLauncher.launchCoordinates(args.car.latitude, args.car.longitude);},
                                     child: Padding(
                                       padding: EdgeInsets.only(top: screenHeight * 0.029),
                                       child: Row(
@@ -235,7 +235,7 @@ class _CarScreenState extends State<CarScreen> {
                                           Padding(
                                             padding: EdgeInsets.only(left: screenWidth * 0.246), // 105 / 428
                                             child: FutureBuilder(
-                                              future: reverseGeocode(widget.car.longitude, widget.car.latitude),
+                                              future: reverseGeocode(args.car.longitude, args.car.latitude),
                                               builder: (context, snapshot) {
                                                 return Text(
                                                   snapshot.hasData ? snapshot.data!.substring(0, 11) : "No location found",
@@ -268,7 +268,7 @@ class _CarScreenState extends State<CarScreen> {
                                         Padding(
                                           padding: EdgeInsets.only(left: screenWidth * 0.246),
                                           child: Text(
-                                            "${widget.car.engineSize}.0 Litres",
+                                            "${args.car.engineSize}.0 Litres",
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: screenWidth * 0.056,
@@ -295,11 +295,11 @@ class _CarScreenState extends State<CarScreen> {
           SizedBox(height: screenHeight * 0.03),
           Row(
             children: [
-              RentWidget(car: widget.car, storage: widget.storage, customers: widget.customers, rentals: widget.rentals, available: widget.isAvailable, inspections: widget.inspections, isActive: (bool active) {setState(() {
+              RentWidget(car: args.car, storage: widget.storage, customers: widget.customers, rentals: widget.rentals, available: args.isAvailable, inspections: widget.inspections, isActive: (bool active) {setState(() {
                 _isActive = active;
               });},),
-              if (widget.isAvailable)
-              BookWidget(car: widget.car, rentals: widget.rentals, storage: widget.storage, customers: widget.customers,),
+              if (args.isAvailable)
+              BookWidget(car: args.car, rentals: widget.rentals, storage: widget.storage, customers: widget.customers,),
             ],
           )
         ],

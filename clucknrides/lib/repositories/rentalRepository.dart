@@ -17,6 +17,17 @@ class RentalRepository {
   Future<void> insertRentals(List<Rental> rentalList) async {
     final batch = database.batch();
 
+    final existingRentals = await database.query('rentals');
+
+    for (final existingRental in existingRentals) {
+      final existingId = existingRental['id'];
+      final existingIndex = rentalList.indexWhere((rental) => rental.id == existingId);
+
+      if (existingIndex == -1) {
+        batch.delete('rentals', where: 'id = ?', whereArgs: [existingId]);
+      }
+    }
+
     for (final rental in rentalList) {
       batch.insert('rentals', rental.toDatabase(),
           conflictAlgorithm: ConflictAlgorithm.replace);

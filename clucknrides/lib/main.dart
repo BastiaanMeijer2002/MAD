@@ -2,6 +2,7 @@ import 'package:clucknrides/repositories/carRepository.dart';
 import 'package:clucknrides/repositories/customerRepository.dart';
 import 'package:clucknrides/repositories/inspectionRepository.dart';
 import 'package:clucknrides/repositories/rentalRepository.dart';
+import 'package:clucknrides/screens/car_screen/main.dart';
 import 'package:clucknrides/screens/home_screen/main.dart';
 import 'package:clucknrides/screens/login_screen/main.dart';
 import 'package:clucknrides/screens/profile_screen/main.dart';
@@ -71,6 +72,7 @@ class MyApp extends StatelessWidget {
         'login': (context) => LoginScreen(storage: storage, customers: customerRepository),
         'register': (context) => RegisterScreen(storage: storage, customers: customerRepository),
         'profile': (context) => ProfileWidget(storage: storage, rentals: rentalRepository, customers: customerRepository,),
+        'cars': (context) => CarScreen(rentals: rentalRepository, customers: customerRepository, storage: storage, inspections: inspectionRepository),
         'start': (context) => const StartScreen(),
       },
     );

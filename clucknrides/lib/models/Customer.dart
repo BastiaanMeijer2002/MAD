@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Customer {
   int id;
   int nr;
@@ -32,4 +34,9 @@ class Customer {
       'from': from,
     };
   }
+
+  String serialize() => json.encode(this);
+
+  static Customer deserialize(String json) => jsonDecode(json);
+
 }

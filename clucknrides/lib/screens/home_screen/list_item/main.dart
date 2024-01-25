@@ -1,5 +1,6 @@
 import 'package:clucknrides/repositories/customerRepository.dart';
 import 'package:clucknrides/repositories/inspectionRepository.dart';
+import 'package:clucknrides/screens/car_screen/car_screen_arguments.dart';
 import 'package:clucknrides/screens/car_screen/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -54,19 +55,10 @@ class _ListItemState extends State<ListItem> {
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) => CarScreen(
-              car: widget.car,
-              isFavorite: false,
-              isAvailable: widget.isAvailable,
-              rentals: widget.rentals,
-              customers: widget.customers,
-              storage: widget.storage,
-              inspections: widget.inspections,
-            ),
-          ),
+          'cars',
+          arguments: CarScreenArguments(car: widget.car, isFavorite: false, isAvailable: widget.isAvailable)
         );
       },
       child: Stack(

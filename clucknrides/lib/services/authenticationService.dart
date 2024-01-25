@@ -28,6 +28,7 @@ Future<bool> authenticateUser(String username, String password, FlutterSecureSto
 
     Customer customer = await fetchCustomer(storage, customerRepository);
     await customerRepository.insertCustomer(customer);
+    await storage.write(key: "customer", value: customer.serialize());
 
     return true;
   } else if (response.statusCode == 401) {

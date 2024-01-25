@@ -1,5 +1,6 @@
 import 'package:clucknrides/models/Rental.dart';
 import 'package:clucknrides/repositories/rentalRepository.dart';
+import 'package:clucknrides/screens/car_screen/car_screen_arguments.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/Customer.dart';
@@ -20,6 +21,9 @@ class _UpcomingRentalWidgetState extends State<UpcomingRentalsWidget>{
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       children: [
         Align(
@@ -57,10 +61,28 @@ class _UpcomingRentalWidgetState extends State<UpcomingRentalsWidget>{
                   shrinkWrap: true,
                   itemCount: rentalList.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(rentalList[index].car.model),
-                      subtitle: Text('Start Date: ${rentalList[index].fromDate}'),
-                      // Add more details as needed
+                    return Padding(
+                      padding: EdgeInsets.only(top: screenHeight * 0.02, right: screenWidth * 0.06,),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0)
+                        ),
+                        child: ListTile(
+                          tileColor: const Color(0XFFFAD4D8),
+                          title: Text('${rentalList[index].car.brand} ${rentalList[index].car.model}'),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('From: ${rentalList[index].fromDate}'),
+                              Text('Until: ${rentalList[index].toDate}')
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.of(context).pushNamed('cars', arguments: CarScreenArguments(car: rentalList[index].car, isFavorite: false, isAvailable: false));
+                          },
+                          trailing: IconButton(icon: const Icon(Icons.cancel_outlined, size: 40,), onPressed: () {  },),
+                        ),
+                      ),
                     );
                   },
                 );

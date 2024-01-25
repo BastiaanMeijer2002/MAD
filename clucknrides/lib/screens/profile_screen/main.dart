@@ -46,7 +46,6 @@ class _ProfileWidgetState extends State<ProfileWidget>{
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             Customer customer = snapshot.data as Customer;
-            print(customer.toJson().toString());
             return Column(
               children: [
                 Padding(

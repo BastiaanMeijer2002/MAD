@@ -503,6 +503,7 @@ class _RentWidgetState extends State<RentWidget> {
                               file,
                               damageDescription,
                             );
+                            await fetchRentals(widget.storage, widget.rentals);
                             if (context.mounted) Navigator.pop(context);
                             if (context.mounted) Navigator.pop(context);
                           },
