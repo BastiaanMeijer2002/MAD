@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:clucknrides/repositories/customerRepository.dart';
 import 'package:clucknrides/repositories/inspectionRepository.dart';
 import 'package:clucknrides/repositories/rentalRepository.dart';
+import 'package:clucknrides/services/authenticationService.dart';
 import 'package:clucknrides/services/fetch_customer.dart';
 import 'package:clucknrides/services/fetch_rentals.dart';
 import 'package:clucknrides/services/startRent.dart';
@@ -46,8 +47,8 @@ class _RentWidgetState extends State<RentWidget> {
   }
 
   Future<void> getActive() async {
-    Customer currentCustomer = await fetchCustomer(widget.storage, widget.customers);
-    isActive = await widget.rentals.isActiveRent(widget.car, currentCustomer);
+    Customer customer = await currentCustomer(widget.storage);
+    isActive = await widget.rentals.isActiveRent(widget.car, customer);
     activeRental = await widget.rentals.activeRental(widget.car);
 
     if (context.mounted) {
@@ -61,15 +62,15 @@ class _RentWidgetState extends State<RentWidget> {
 
   Future<void> getModal() async {
     await fetchRentals(widget.storage, widget.rentals);
-    Customer currentCustomer = await fetchCustomer(widget.storage, widget.customers);
-    isActive = await widget.rentals.isActiveRent(widget.car, currentCustomer);
+    Customer customer = await currentCustomer(widget.storage);
+    isActive = await widget.rentals.isActiveRent(widget.car, customer);
 
     if (context.mounted) {
       if (isActive) {
         activeRent(context);
       } else {
         List<DateTime> dates = await widget.rentals.unavailableDays(widget.car);
-        if (context.mounted) dates.isNotEmpty ? newRent(context, dates.last) : newRent(context, null);
+        if (context.mounted) dates.isNotEmpty ? newRent(context, dates.first) : newRent(context, null);
 
       }
     }

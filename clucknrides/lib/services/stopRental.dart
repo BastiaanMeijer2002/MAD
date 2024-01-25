@@ -18,7 +18,7 @@ Future<void> stopRent(FlutterSecureStorage storage, Car car, CustomerRepository 
   Rental rental = await rentals.activeRental(car);
 
   final jwt = await storage.read(key: "jwt");
-  await createInspection(storage, file, desc, rental);
+  await createInspection(storage, file, desc, rental, inspections);
 
   final response = await http.patch(
     Uri.parse('${dotenv.env["API_BASE_URL"]}/api/rentals/${rental.id}'),
@@ -43,7 +43,7 @@ Future<void> stopRent(FlutterSecureStorage storage, Car car, CustomerRepository 
   }
 }
 
-Future<Inspection?> createInspection(FlutterSecureStorage storage, String file, String desc, Rental rental) async{
+Future<Inspection?> createInspection(FlutterSecureStorage storage, String file, String desc, Rental rental, InspectionRepository inspections) async{
   final jwt = await storage.read(key: "jwt");
 
   if (file.isNotEmpty && desc.isNotEmpty) {
@@ -62,8 +62,11 @@ Future<Inspection?> createInspection(FlutterSecureStorage storage, String file, 
 
     if (inspectionResponse.statusCode == 201) {
       Map<String, dynamic> responseData = jsonDecode(inspectionResponse.body);
-      print(responseData.toString());
-      return Inspection.fromJson(responseData);
+      print('test ${responseData.toString()}');
+      final inspection =  Inspection.fromJson(responseData);
+      print(inspection.toJson().toString());
+      await inspections.insertInspection(inspection);
+      return inspection;
     }
 
     throw const HttpException("Creating inspection failed");

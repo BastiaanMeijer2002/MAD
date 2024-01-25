@@ -1,5 +1,6 @@
 import 'package:clucknrides/repositories/inspectionRepository.dart';
 import 'package:clucknrides/screens/profile_screen/main.dart';
+import 'package:clucknrides/services/fetch_inspections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart';
@@ -146,11 +147,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   Future<void> _refreshCars() async {
     setState(() {
       futureCars = fetchCars(widget.storage, widget.cars);
+      fetchRentals(widget.storage, widget.rentals);
     });
   }
 
   Future<void> _onRefresh() async {
-    // Fetch the updated car list when the user pulls down to refresh
     await _refreshCars();
     await Future.delayed(const Duration(seconds: 1));
   }
@@ -174,8 +175,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         ),
         actions: [
           IconButton(
-            onPressed: (){
-              Navigator.of(context).pushNamed('profile');
+            onPressed: () async {
+              await fetchInspections(widget.storage, widget.inspections);
+              if (context.mounted) Navigator.of(context).pushNamed('profile');
             },
             icon: const Icon(
               Icons.person_outline,

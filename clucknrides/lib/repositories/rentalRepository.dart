@@ -48,7 +48,6 @@ class RentalRepository {
     final List<Map<String, dynamic>> rentalsData =
     await database.query("rentals");
 
-    // Convert database data to List of Rental objects with complete Car and Customer
     final List<Rental> rentals = [];
     for (final rentalData in rentalsData) {
       final Rental rental = await _mapToRental(rentalData);
@@ -65,7 +64,6 @@ class RentalRepository {
       whereArgs: [car.id],
     );
 
-    // Convert database data to List of Rental objects with complete Car and Customer
     final List<Rental> rentals = [];
     for (final rentalData in rentalsData) {
       final Rental rental = await _mapToRental(rentalData);
@@ -146,7 +144,7 @@ class RentalRepository {
 
   Future<List<Rental>> activeRentals(Customer customer) async {
     List<Rental> rentals = [];
-    final List<Map<String, dynamic>> rentalsData = await database.query('rentals', where: "customerId = ? AND state = ?", whereArgs: [customer.id, "ACTIVE"]);
+    final List<Map<String, dynamic>> rentalsData = await database.query('rentals', where: "customerId = ? AND state = ?", whereArgs: [customer.id, "ACTIVE"], orderBy: "id DESC");
     if (rentalsData.isNotEmpty) {
       for (Map<String,dynamic> rental in rentalsData) {
         Car car = await cars.car(rental["carId"]);
@@ -160,7 +158,7 @@ class RentalRepository {
   Future<List<Rental>> upcomingRentals(Customer customer) async {
     print('user: ${customer.id}');
     List<Rental> rentals = [];
-    final List<Map<String, dynamic>> rentalsData = await database.query('rentals', where: "customerId = ? AND state = ?", whereArgs: [customer.id, "RESERVED"]);
+    final List<Map<String, dynamic>> rentalsData = await database.query('rentals', where: "customerId = ? AND state = ?", whereArgs: [customer.id, "RESERVED"], orderBy: "id DESC");
     if (rentalsData.isNotEmpty) {
       for (Map<String,dynamic> rental in rentalsData) {
         Car car = await cars.car(rental["carId"]);
@@ -173,7 +171,7 @@ class RentalRepository {
 
   Future<List<Rental>> finishedRentals(Customer customer) async {
     List<Rental> rentals = [];
-    final List<Map<String, dynamic>> rentalsData = await database.query('rentals', where: "customerId = ? AND state = ?", whereArgs: [customer.id, "RETURNED"]);
+    final List<Map<String, dynamic>> rentalsData = await database.query('rentals', where: "customerId = ? AND state = ?", whereArgs: [customer.id, "RETURNED"], orderBy: "id DESC");
     if (rentalsData.isNotEmpty) {
       for (Map<String,dynamic> rental in rentalsData) {
         Car car = await cars.car(rental["carId"]);

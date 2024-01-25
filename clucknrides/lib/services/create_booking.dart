@@ -6,6 +6,7 @@ import 'package:clucknrides/models/Customer.dart';
 import 'package:clucknrides/models/Rental.dart';
 import 'package:clucknrides/repositories/customerRepository.dart';
 import 'package:clucknrides/repositories/rentalRepository.dart';
+import 'package:clucknrides/services/authenticationService.dart';
 import 'package:clucknrides/services/fetch_customer.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -15,7 +16,7 @@ import 'package:http/http.dart' as http;
 Future<Rental> createBooking(FlutterSecureStorage storage, Car car, CustomerRepository customers, RentalRepository rentals ,DateTime start, DateTime? end) async {
   final jwt = await storage.read(key: "jwt");
 
-  Customer customer = await fetchCustomer(storage, customers);
+  Customer customer = await currentCustomer(storage);
   final response = await http.post(
     Uri.parse('${dotenv.env["API_BASE_URL"]}/api/rentals'),
     headers: {

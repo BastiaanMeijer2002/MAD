@@ -2,6 +2,7 @@ import 'package:clucknrides/models/Customer.dart';
 import 'package:clucknrides/repositories/customerRepository.dart';
 import 'package:clucknrides/repositories/rentalRepository.dart';
 import 'package:clucknrides/screens/car_screen/book_widget/calender_widget.dart';
+import 'package:clucknrides/services/authenticationService.dart';
 import 'package:clucknrides/services/create_booking.dart';
 import 'package:clucknrides/services/fetch_customer.dart';
 import 'package:clucknrides/services/fetch_rentals.dart';
@@ -193,7 +194,7 @@ class _BookWidgetState extends State<BookWidget> {
 
   Future<void> getModal() async{
     await fetchRentals(widget.storage, widget.rentals);
-    Customer customer = await fetchCustomer(widget.storage, widget.customers);
+    Customer customer = await currentCustomer(widget.storage);
     Rental? rental = await widget.rentals.activeBooking(widget.car, customer);
 
     if (rental != null) {

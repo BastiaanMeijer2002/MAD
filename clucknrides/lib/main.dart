@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.database, required this.customerRepository, required this.rentalRepository, required this.carRepository, required this.inspectionRepository});
   static const storage = FlutterSecureStorage();
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -71,7 +70,7 @@ class MyApp extends StatelessWidget {
         'home': (context) => HomeScreen(storage: storage, rentals: rentalRepository, customers: customerRepository, cars: carRepository, inspections: inspectionRepository),
         'login': (context) => LoginScreen(storage: storage, customers: customerRepository),
         'register': (context) => RegisterScreen(storage: storage, customers: customerRepository),
-        'profile': (context) => ProfileWidget(storage: storage, rentals: rentalRepository, customers: customerRepository,),
+        'profile': (context) => ProfileWidget(storage: storage, rentals: rentalRepository, customers: customerRepository, inspections: inspectionRepository,),
         'cars': (context) => CarScreen(rentals: rentalRepository, customers: customerRepository, storage: storage, inspections: inspectionRepository),
         'start': (context) => const StartScreen(),
       },

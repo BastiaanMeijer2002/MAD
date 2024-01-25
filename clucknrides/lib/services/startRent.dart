@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:clucknrides/repositories/customerRepository.dart';
 import 'package:clucknrides/repositories/rentalRepository.dart';
+import 'package:clucknrides/services/authenticationService.dart';
 import 'package:clucknrides/services/fetch_customer.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -13,7 +14,7 @@ import '../models/Customer.dart';
 import '../models/Rental.dart';
 
 Future<void> startRent(FlutterSecureStorage storage, Car car, CustomerRepository customers, RentalRepository rentals) async {
-  Customer customer = await fetchCustomer(storage, customers);
+  Customer customer = await currentCustomer(storage);
 
   final jwt = await storage.read(key: "jwt");
   final response = await http.post(
@@ -29,8 +30,6 @@ Future<void> startRent(FlutterSecureStorage storage, Car car, CustomerRepository
       'car': car.toJson(),
     }),
   );
-
-  print(response.request.toString());
 
   if (response.statusCode == 201) {
     Map<String, dynamic> responseData = jsonDecode(response.body);

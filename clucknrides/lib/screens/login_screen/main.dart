@@ -149,6 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         return FutureBuilder<bool>(
                           future: loginUser(),
                           builder: (context, snapshot) {
+                            print(snapshot.error);
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               return const LoadingWidget(message: "Howdy, welcome back!");
                             } else if (snapshot.hasData && snapshot.data!) {

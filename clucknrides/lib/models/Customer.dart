@@ -35,8 +35,8 @@ class Customer {
     };
   }
 
-  String serialize() => json.encode(this);
+  static String serialize(Customer customer) => json.encode(customer);
 
-  static Customer deserialize(String json) => jsonDecode(json);
+  static Customer deserialize(String json) => Customer.fromJson(jsonDecode(json));
 
 }

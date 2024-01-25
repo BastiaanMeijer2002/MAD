@@ -17,22 +17,7 @@ class ActiveRentalsWidget extends StatefulWidget {
 }
 
 class _ActiveRentalWidgetState extends State<ActiveRentalsWidget>{
-  bool showList = true;
-
-  void rentalModal() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          height: double.infinity,
-          decoration: const BoxDecoration(
-            color: Color(0XFFFAD4D8),
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-          )
-        );
-      }
-    );
-  }
+  bool showList = false;
 
   @override
   Widget build(BuildContext context) {

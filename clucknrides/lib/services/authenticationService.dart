@@ -28,7 +28,7 @@ Future<bool> authenticateUser(String username, String password, FlutterSecureSto
 
     Customer customer = await fetchCustomer(storage, customerRepository);
     await customerRepository.insertCustomer(customer);
-    await storage.write(key: "customer", value: customer.serialize());
+    await storage.write(key: "customer", value: Customer.serialize(customer));
 
     return true;
   } else if (response.statusCode == 401) {
@@ -36,6 +36,11 @@ Future<bool> authenticateUser(String username, String password, FlutterSecureSto
   } else {
     throw HttpException('${response.statusCode}: ${response.body}');
   }
+}
+
+Future<Customer> currentCustomer(FlutterSecureStorage storage) async {
+  final json = await storage.read(key: "customer");
+  return Customer.deserialize(json!);
 }
 
 Future<bool> registerUser({
