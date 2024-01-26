@@ -1,30 +1,57 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+import 'package:clucknrides/repositories/customerRepository.dart';
+import 'package:clucknrides/repositories/inspectionRepository.dart';
+import 'package:clucknrides/repositories/rentalRepository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:clucknrides/models/Car.dart';
+import 'package:clucknrides/screens/home_screen/list_item/main.dart';
+import 'package:mockito/mockito.dart';
 
-import 'package:clucknrides/main.dart';
+class MockNavigatorObserver extends Mock implements NavigatorObserver {}
+
+class MockRentalRepository extends Mock implements RentalRepository {}
+class MockCustomerRepository extends Mock implements CustomerRepository {}
+class MockInspectionRepository extends Mock implements InspectionRepository {}
+class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  TestWidgetsFlutterBinding.ensureInitialized();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  group('ListItem Widget Tests', () {
+    testWidgets('Renders with correct data', (WidgetTester tester) async {
+      final exampleCar = Car(
+        id: 1,
+        brand: 'Toyota',
+        model: 'Corolla',
+        nrOfSeats: 5,
+        fuel: 'Petrol',
+        img: 'fiesta.png', // Here, 'car.png' is just a placeholder
+        price: 20000,
+        engineSize: 1800,
+        modelYear: 2021,
+        longitude: 0.0,
+        latitude: 0.0,
+      );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      final mockRentals = MockRentalRepository();
+      final mockCustomers = MockCustomerRepository();
+      final mockInspections = MockInspectionRepository();
+      final mockStorage = MockFlutterSecureStorage();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      await tester.pumpWidget(MaterialApp(
+        home: ListItem(
+          exampleCar,
+          true,
+          rentals: mockRentals,
+          customers: mockCustomers,
+          inspections: mockInspections,
+          storage: mockStorage,
+        ),
+      ));
+
+      expect(find.text('Toyota Corolla'), findsOneWidget);
+      // Additional assertions as necessary
+    });
   });
 }
