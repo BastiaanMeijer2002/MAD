@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../models/Customer.dart';
+import '../../services/check_connection.dart';
 
 class UpcomingRentalsWidget extends StatefulWidget {
   final Customer customer;
@@ -36,7 +37,7 @@ class _UpcomingRentalWidgetState extends State<UpcomingRentalsWidget> {
   }
 
   Future<void> _refreshRentals() async {
-    await fetchRentals(widget.storage, widget.rentals);
+    if(await checkInternetConnection()) await fetchRentals(widget.storage, widget.rentals);
     setState(() {
       _rentalList = widget.rentals.upcomingRentals(widget.customer);
     });
@@ -117,8 +118,14 @@ class _UpcomingRentalWidgetState extends State<UpcomingRentalsWidget> {
                             trailing: IconButton(
                               icon: const Icon(Icons.cancel_outlined, size: 40,),
                               onPressed: () async {
-                                await removeRental(widget.storage, widget.rentals, widget.inspections, rentalList[index]);
-                                _refreshIndicatorKey.currentState?.show();
+                                final connectionStatus = await checkInternetConnection();
+                                if (connectionStatus) {
+                                  await removeRental(widget.storage, widget.rentals, widget.inspections, rentalList[index]);
+                                  _refreshIndicatorKey.currentState?.show();
+                                } else {
+                                  const snackBar = SnackBar(content: Text("You have no connection, please try again if you're connected."));
+                                  if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                }
                               },
                             ),
                           ),

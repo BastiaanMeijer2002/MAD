@@ -1,4 +1,6 @@
+import 'package:clucknrides/services/check_connection.dart';
 import 'package:clucknrides/utils/messaging.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:clucknrides/repositories/carRepository.dart';
 import 'package:clucknrides/repositories/customerRepository.dart';
@@ -58,24 +60,33 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFD6FFB7),
         useMaterial3: true,
       ),
-      home: Builder(
-        builder: (BuildContext context) {
-          return FutureBuilder<String?>(
-            future: storage.read(key: 'jwt'),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData && snapshot.data != null) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.of(context).pushReplacementNamed('home');
-                  });
-                }
-                return const StartScreen();
-              } else {
-                return const LoadingWidget(message: 'Welcome back');
-              }
-            },
-          );
-        },
+      home: FutureBuilder(
+        future: checkInternetConnection(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData){
+            if (snapshot.data as bool){
+              return FutureBuilder<String?>(
+                future: storage.read(key: 'jwt'),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasData && snapshot.data != null) {
+                      Future.delayed(Duration.zero, () {
+                        Navigator.of(context).pushReplacementNamed('home');
+                      });
+                    }
+                    return const StartScreen();
+                  } else {
+                    return const LoadingWidget(message: 'Welcome back');
+                  }
+                },
+              );
+            }
+            Future.delayed(Duration.zero, () {
+              Navigator.of(context).pushReplacementNamed('profile');
+            });
+          }
+          return Container();
+        }
       ),
       routes: {
         'home': (context) => HomeScreen(storage: storage, rentals: rentalRepository, customers: customerRepository, cars: carRepository, inspections: inspectionRepository),

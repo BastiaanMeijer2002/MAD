@@ -1,12 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:clucknrides/repositories/customerRepository.dart';
 import 'package:clucknrides/repositories/inspectionRepository.dart';
 import 'package:clucknrides/repositories/rentalRepository.dart';
 import 'package:clucknrides/services/authenticationService.dart';
+import 'package:clucknrides/services/check_connection.dart';
 import 'package:clucknrides/services/fetch_customer.dart';
 import 'package:clucknrides/services/fetch_rentals.dart';
 import 'package:clucknrides/services/startRent.dart';
+import 'package:clucknrides/widgets/inspection-widget/main.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -380,151 +384,48 @@ class _RentWidgetState extends State<RentWidget> {
     );
   }
 
+  Future<void> _stopRent() async {
+    fetchRentals(widget.storage, widget.rentals);
+    await stopRent(
+      widget.storage,
+      widget.car,
+      widget.customers,
+      widget.rentals,
+      widget.inspections,
+      file,
+      damageDescription,
+    );
+    await fetchRentals(widget.storage, widget.rentals);
+  }
+
   void inspectionModel(BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          height: double.infinity,
-          decoration: const BoxDecoration(
-            color: Color(0XFFFAD4D8),
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              // Header
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text(
-                    "Howdy, thanks for using Cluck'N'Rides",
-                    style: TextStyle(
-                      fontFamily: "inter",
-                      fontWeight: FontWeight.w600,
-                      fontSize: 24,
-                    ),
-                    maxLines: 3,
-                  ),
-                ),
-              ),
-
-              // Description
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text(
-                    'Please check the vehicle for any damages. If you do spot any, please submit a picture of the damages and give an additional description. ',
-                    style: TextStyle(
-                      fontFamily: "inter",
-                      fontWeight: FontWeight.w400,
-                      fontSize: 18,
-                    ),
-                    maxLines: 4,
-                  ),
-                ),
-              ),
-
-              // Upload photo button
-              Align(
-                alignment: Alignment.topLeft,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: TextButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(const Color(0XFF0F110C)),
-                          foregroundColor: MaterialStateProperty.all(const Color(0XFFFFFCFC)),
-                        ),
-                        onPressed: () async {
-                          await _uploadPhoto();
-                        },
-                        child: const Text('Upload photo'),
-                      ),
-                    ),
-                    Builder(
-                      builder: (BuildContext context) {
-                        return Text(imgState);
-                      },
-                    )
-                  ],
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    maxLines: 1,
-                    onChanged: (value) {
-                      setState(() {
-                        damageDescription = value;
-                      });
-                    },
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Describe the damage shown in the picture',
-                    ),
-                  ),
-                ),
-              ),
-              // Buttons and actions
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(const Color(0XFF0F110C)),
-                            foregroundColor: MaterialStateProperty.all(const Color(0XFFFFFCFC)),
-                            textStyle: MaterialStateProperty.all(
-                              const TextStyle(
-                                fontSize: 18,
-                                fontFamily: "inter",
-                                fontWeight: FontWeight.w600,
-                                color: Color(0XFFFFFCFC),
-                              ),
-                            ),
-                          ),
-                          onPressed: () async {
-                            fetchRentals(widget.storage, widget.rentals);
-                            await stopRent(
-                              widget.storage,
-                              widget.car,
-                              widget.customers,
-                              widget.rentals,
-                              widget.inspections,
-                              file,
-                              damageDescription,
-                            );
-                            await fetchRentals(widget.storage, widget.rentals);
-                            if (context.mounted) Navigator.pop(context);
-                            if (context.mounted) Navigator.pop(context);
-                          },
-                          child: const Text(
-                            'Stop renting',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: "inter",
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+        return InspectionModelWidget(
+          onUploadPhoto: () async {
+            await _uploadPhoto();
+            setState(() {
+              imgState = "File uploaded";
+            });
+          },
+          onDescriptionChanged: (value) {
+            setState(() {
+              damageDescription = value;
+            });
+          },
+          onStopRent: () async {
+            final connectionStatus = await checkInternetConnection();
+            if (connectionStatus) {
+              await _stopRent();
+            } else {
+              const snackBar = SnackBar(content: Text("You have no connection, please try again if you're connected."));
+              if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
+            if (context.mounted) Navigator.pop(context);
+            if (context.mounted) Navigator.pop(context);
+          },
+          imgState: imgState,
         );
       },
     );
