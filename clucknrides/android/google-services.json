@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "327751575329",
+    "project_id": "cluck-n-rides",
+    "storage_bucket": "cluck-n-rides.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327751575329:android:d893d397d58c2e96760060",
+        "android_client_info": {
+          "package_name": "com.example.clucknrides"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfCiwMWT-q6BAHmXw7ORycdMkiXz6hknA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

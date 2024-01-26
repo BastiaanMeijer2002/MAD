@@ -288,7 +288,7 @@ class _RentWidgetState extends State<RentWidget> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.22,
+          height: double.infinity,
           decoration: const BoxDecoration(
             color: Color(0XFFFAD4D8),
             borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
@@ -385,7 +385,7 @@ class _RentWidgetState extends State<RentWidget> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: MediaQuery.of(context).size.height * 1.5,
+          height: double.infinity,
           decoration: const BoxDecoration(
             color: Color(0XFFFAD4D8),
             borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
@@ -456,9 +456,9 @@ class _RentWidgetState extends State<RentWidget> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: TextField(
-                    maxLines: 3,
+                    maxLines: 1,
                     onChanged: (value) {
                       setState(() {
                         damageDescription = value;

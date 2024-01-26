@@ -1,0 +1,8 @@
+{
+    "Simulator Target Bundle": "com.example.clucknrides",
+    "aps": {
+        "alert": "Push-уведомление для симулятора!",
+        "badge": 1,
+        "sound": "default"
+    }
+}

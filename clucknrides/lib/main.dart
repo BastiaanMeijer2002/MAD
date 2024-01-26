@@ -1,3 +1,5 @@
+import 'package:clucknrides/utils/messaging.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:clucknrides/repositories/carRepository.dart';
 import 'package:clucknrides/repositories/customerRepository.dart';
 import 'package:clucknrides/repositories/inspectionRepository.dart';
@@ -16,8 +18,17 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await Messaging.initializeMessaging();
+
   final database = await DatabaseProvider().initDatabase();
   final CustomerRepository customers = CustomerRepository(database);
   final CarRepository cars = CarRepository(database);

@@ -14,20 +14,28 @@ class InspectionRepository {
   Future<void> insertInspections(List<Inspection> inspectionList) async {
     final batch = database.batch();
 
-    final existingInspections = await database.query('inspections');
+    final existingInspections = await database.query('inspections', columns: ["id"]);
 
-    for (final existingInspection in existingInspections) {
-      final existingId = existingInspection['id'];
-      final existingIndex = inspectionList.indexWhere((inspection) => inspection.id == existingId);
+    final existingIds = Set<int>.from(existingInspections.map((inspection) => inspection['id']));
 
-      if (existingIndex == -1) {
-        batch.delete('inspections', where: 'id = ?', whereArgs: [existingId]);
+    for (final inspection in inspectionList) {
+      final inspectionId = inspection.id;
+
+      if (existingIds.contains(inspectionId)) {
+        batch.update('inspections', inspection.toJson(),
+            where: 'id = ?', whereArgs: [inspectionId]);
+      } else {
+        batch.insert('inspections', inspection.toJson(),
+            conflictAlgorithm: ConflictAlgorithm.replace);
       }
     }
 
-    for (final inspection in inspectionList) {
-      batch.insert('inspections', inspection.toJson(),
-          conflictAlgorithm: ConflictAlgorithm.replace);
+    for (final existingInspection in existingInspections) {
+      final existingId = existingInspection['id'];
+
+      if (!existingIds.contains(existingId)) {
+        batch.delete('inspections', where: 'id = ?', whereArgs: [existingId]);
+      }
     }
 
     await batch.commit(noResult: true);
