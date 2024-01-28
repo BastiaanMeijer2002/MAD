@@ -14,7 +14,7 @@ import '../models/Customer.dart';
 import '../models/Rental.dart';
 import 'fetch_customer.dart';
 
-Future<void> stopRent(FlutterSecureStorage storage, Car car, CustomerRepository customers, RentalRepository rentals, InspectionRepository inspections, String file, String desc) async {
+Future<void> stopRent(FlutterSecureStorage storage, Car car, CustomerRepository customers, RentalRepository rentals, InspectionRepository inspections, String file, String desc,) async {
   Rental rental = await rentals.activeRental(car);
 
   final jwt = await storage.read(key: "jwt");

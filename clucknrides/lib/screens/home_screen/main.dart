@@ -1,5 +1,4 @@
 import 'package:clucknrides/repositories/inspectionRepository.dart';
-import 'package:clucknrides/screens/profile_screen/main.dart';
 import 'package:clucknrides/services/fetch_inspections.dart';
 import 'package:clucknrides/services/notification_service.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,6 @@ import 'package:clucknrides/services/reverse_geocode.dart';
 import 'package:clucknrides/services/fetch_customers.dart';
 import 'package:clucknrides/services/is_available.dart';
 import 'package:clucknrides/widgets/loading_widget/main.dart';
-import 'package:package_info/package_info.dart';
 
 import '../../models/Rental.dart';
 
@@ -229,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                 inspections: widget.inspections,
                               );
                             }
-                            return const Text("test");
+                            return Container();
                           },
                         );
                       },

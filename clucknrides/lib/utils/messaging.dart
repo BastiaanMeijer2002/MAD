@@ -26,36 +26,33 @@ class Messaging {
     print('User granted permission: ${settings.authorizationStatus}');
   }
 
-  static void _setOnMessage(){
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('message received ${message.notification?.hashCode.toString()} ${message.notification?.title.toString()} ${message.notification?.body.toString()} ${message.notification?.android.toString()}');
-      print('channel: ${channel.id} ${channel.name} ${channel.description}');
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
+  static void _showMessage(RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
 
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
+    if (notification != null && android != null) {
+      flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
           NotificationDetails(
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
               channelDescription: channel.description,
               icon: android.smallIcon,
-
             ),
           ));
-        }
-      }
-    );
+    }
+  }
+
+  static void _setOnMessage(){
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {_showMessage(message);});
   }
 
   static Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     await Firebase.initializeApp();
-
-    print("Handling a background message: ${message.messageId}");
+    _showMessage(message);
   }
 
   static Future<void> initializeMessaging() async {
