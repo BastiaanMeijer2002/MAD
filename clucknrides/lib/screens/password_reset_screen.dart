@@ -125,7 +125,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                     height: 40,
                     child: const Center(
                       child: Text(
-                        "Login",
+                        "Send reset email",
                         style: TextStyle(
                           fontSize: 18, // Adjusted font size
                           fontWeight: FontWeight.w600,

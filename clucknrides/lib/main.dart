@@ -57,6 +57,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Cluck'N'Rides",
       theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+        ),
         fontFamily: 'Inter',
         scaffoldBackgroundColor: const Color(0xFFD6FFB7),
         useMaterial3: true,
