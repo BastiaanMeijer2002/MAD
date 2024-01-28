@@ -192,12 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.only(top: 5, left: 20, right: 20),
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PasswordResetScreen(),
-                  ),
-                );
+                Navigator.of(context).pushNamed('password_reset');
               },
               child: const Text(
                 "Forgot Password?",

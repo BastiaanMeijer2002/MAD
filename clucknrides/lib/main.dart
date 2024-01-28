@@ -1,3 +1,4 @@
+import 'package:clucknrides/screens/password_reset_screen.dart';
 import 'package:clucknrides/utils/messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:clucknrides/repositories/carRepository.dart';
@@ -84,6 +85,7 @@ class MyApp extends StatelessWidget {
         'profile': (context) => ProfileWidget(storage: storage, rentals: rentalRepository, customers: customerRepository, inspections: inspectionRepository,),
         'cars': (context) => CarScreen(rentals: rentalRepository, customers: customerRepository, storage: storage, inspections: inspectionRepository),
         'start': (context) => const StartScreen(),
+        'password_reset': (context) => const PasswordResetScreen(storage: storage),
       },
     );
   }

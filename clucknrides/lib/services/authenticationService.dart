@@ -73,3 +73,20 @@ Future<bool> registerUser({
     throw HttpException('${response.statusCode}: ${response.body}');
   }
 }
+
+Future<bool> forgotPassword(String email) async {
+  final response = await http.post(
+    Uri.parse("${dotenv.env["API_BASE_URL"]}/api/account/reset-password/init"),
+    headers: <String, String>{
+      'accept': '*/*',
+      'Content-Type': 'text/plain',
+    },
+    body: email
+  );
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    throw HttpException('${response.statusCode}: ${response.body}');
+  }
+}
