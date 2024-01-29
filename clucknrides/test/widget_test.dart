@@ -73,51 +73,54 @@ void main() {
       // Images
       expect(find.byType(Image), findsNWidgets(2));
     });
-
-  //   testWidgets('Navigates to CarScreen on tap', (WidgetTester tester) async {
-  //     // Mock necessary dependencies
-  //     final mockRentals = MockRentalRepository();
-  //     final mockCustomers = MockCustomerRepository();
-  //     final mockInspections = MockInspectionRepository();
-  //     final mockStorage = MockFlutterSecureStorage();
-  //
-  //     final mockObserver = MockNavigatorObserver();
-  //
-  //     final exampleCar = Car(
-  //       id: 1,
-  //       brand: 'Toyota',
-  //       model: 'Corolla',
-  //       nrOfSeats: 5,
-  //       fuel: 'Petrol',
-  //       img: 'fiesta.png', // Here, 'car.png' is just a placeholder
-  //       price: 20000,
-  //       engineSize: 1800,
-  //       modelYear: 2021,
-  //       longitude: 0.0,
-  //       latitude: 0.0,
-  //     );
-  //
-  //     await tester.pumpWidget(MaterialApp(
-  //       home: ListItem(
-  //         exampleCar,
-  //         true,
-  //         rentals: mockRentals,
-  //         customers: mockCustomers,
-  //         inspections: mockInspections,
-  //         storage: mockStorage,
-  //       ),
-  //       navigatorObservers: [mockObserver],
-  //       routes: {
-  //         'cars': (context) => MockCarScreen(),
-  //       },
-  //     ));
-  //
-  //     await tester.tap(find.byType(GestureDetector));
-  //     await tester.pumpAndSettle();
-  //
-  //     // Assert that the navigation occurred.
-  //     // This part depends on your navigation setup.
-  //     verify(mockObserver.didPush(any, any));
-  //   });
   });
 }
+
+
+
+
+//   testWidgets('Navigates to CarScreen on tap', (WidgetTester tester) async {
+//     // Mock necessary dependencies
+//     final mockRentals = MockRentalRepository();
+//     final mockCustomers = MockCustomerRepository();
+//     final mockInspections = MockInspectionRepository();
+//     final mockStorage = MockFlutterSecureStorage();
+//
+//     final mockObserver = MockNavigatorObserver();
+//
+//     final exampleCar = Car(
+//       id: 1,
+//       brand: 'Toyota',
+//       model: 'Corolla',
+//       nrOfSeats: 5,
+//       fuel: 'Petrol',
+//       img: 'fiesta.png', // Here, 'car.png' is just a placeholder
+//       price: 20000,
+//       engineSize: 1800,
+//       modelYear: 2021,
+//       longitude: 0.0,
+//       latitude: 0.0,
+//     );
+//
+//     await tester.pumpWidget(MaterialApp(
+//       home: ListItem(
+//         exampleCar,
+//         true,
+//         rentals: mockRentals,
+//         customers: mockCustomers,
+//         inspections: mockInspections,
+//         storage: mockStorage,
+//       ),
+//       navigatorObservers: [mockObserver],
+//       routes: {
+//         'cars': (context) => MockCarScreen(),
+//       },
+//     ));
+//
+//     await tester.tap(find.byType(GestureDetector));
+//     await tester.pumpAndSettle();
+//
+//     // Assert that the navigation occurred.
+//     // This part depends on your navigation setup.
+//     verify(mockObserver.didPush(any, any));
+//   });
