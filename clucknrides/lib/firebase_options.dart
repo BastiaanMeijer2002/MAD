@@ -44,38 +44,38 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAAPFarzly5dYchmaoMOlzzR8HKOQWktmE',
-    appId: '1:327751575329:web:ea2df0a21c7cfc48760060',
-    messagingSenderId: '327751575329',
-    projectId: 'cluck-n-rides',
-    authDomain: 'cluck-n-rides.firebaseapp.com',
-    storageBucket: 'cluck-n-rides.appspot.com',
-    measurementId: 'G-D5J0QFPLCP',
+    apiKey: '',
+    appId: '',
+    messagingSenderId: '',
+    projectId: '',
+    authDomain: '',
+    storageBucket: '',
+    measurementId: '',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBfCiwMWT-q6BAHmXw7ORycdMkiXz6hknA',
-    appId: '1:327751575329:android:d893d397d58c2e96760060',
-    messagingSenderId: '327751575329',
-    projectId: 'cluck-n-rides',
-    storageBucket: 'cluck-n-rides.appspot.com',
+    apiKey: '',
+    appId: '',
+    messagingSenderId: '',
+    projectId: '',
+    storageBucket: '',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBzOP5uOO1dpnnPfgaKjxRHY-7ZxYU6Usk',
-    appId: '1:327751575329:ios:da8c06ca574bf190760060',
-    messagingSenderId: '327751575329',
-    projectId: 'cluck-n-rides',
-    storageBucket: 'cluck-n-rides.appspot.com',
-    iosBundleId: 'com.example.clucknrides',
+    apiKey: '',
+    appId: '',
+    messagingSenderId: '',
+    projectId: '',
+    storageBucket: '',
+    iosBundleId: '',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBzOP5uOO1dpnnPfgaKjxRHY-7ZxYU6Usk',
-    appId: '1:327751575329:ios:4a4ad64ce6380cbb760060',
-    messagingSenderId: '327751575329',
-    projectId: 'cluck-n-rides',
-    storageBucket: 'cluck-n-rides.appspot.com',
-    iosBundleId: 'com.example.clucknrides.RunnerTests',
+    apiKey: '',
+    appId: '',
+    messagingSenderId: '',
+    projectId: '',
+    storageBucket: '',
+    iosBundleId: '',
   );
 }
