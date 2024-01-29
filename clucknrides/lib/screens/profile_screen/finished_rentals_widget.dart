@@ -108,7 +108,7 @@ class _FinishedRentalWidgetState extends State<FinishedRentalsWidget>{
                                         color: Color(0XFFFAD4D8),
                                         borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
                                       ),
-                                      height: screenHeight,
+                                      height: 2*screenHeight,
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [

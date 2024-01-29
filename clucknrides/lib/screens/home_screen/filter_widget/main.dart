@@ -38,7 +38,7 @@ class _FilterWidgetState extends State<FilterWidget> {
         AnimatedContainer(
           margin: EdgeInsets.only(left: 6, top: screenHeight * 0.032, right: 0, bottom: 0),
           duration: const Duration(milliseconds: 100),
-          height: showList ? MediaQuery.of(context).size.height * 0.40 : MediaQuery.of(context).size.height * 0.05,
+          height: showList ? MediaQuery.of(context).size.height * 0.43 : MediaQuery.of(context).size.height * 0.05,
           width: showList ? MediaQuery.of(context).size.width * 0.87 : MediaQuery.of(context).size.width * 0.41,
           child: GestureDetector(
             onTap: () {

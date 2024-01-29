@@ -178,7 +178,7 @@ class _RentWidgetState extends State<RentWidget> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.22,
+          height: double.infinity,
           decoration: const BoxDecoration(
             color: Color(0XFFFAD4D8),
             borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),

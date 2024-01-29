@@ -238,7 +238,7 @@ class _CarScreenState extends State<CarScreen> {
                                               future: reverseGeocode(args.car.longitude, args.car.latitude),
                                               builder: (context, snapshot) {
                                                 return Text(
-                                                  snapshot.hasData ? snapshot.data!.substring(0, 11) : "No location found",
+                                                  snapshot.hasData ? snapshot.data!.substring(0, 11) : "Loading...",
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: screenWidth * 0.056, // 24 / 428
